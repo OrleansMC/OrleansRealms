@@ -1,0 +1,45 @@
+name: OrleansRealms
+version: '${version}'
+main: com.orleansmc.realms.OrleansRealms
+api-version: '1.20'
+softdepend:
+  - OrleansInteractions
+  - OrleansShops
+depend:
+  - OrleansMC
+  - HuskHomes
+  - helper
+  - helper-redis
+  - helper-mongo
+  - WorldBorderAPI
+  - Chunky
+  - Quests
+  - SkinsRestorer
+permissions:
+  "orleansmc.realms.staff":
+    description: "Allows access to all staff commands."
+    default: op
+  "orleansmc.realms.admin":
+    description: "Allows access to all admin commands."
+    default: op
+  "orleansmc.realms.set_time":
+    description: "Allows access realm time setting."
+    default: op
+  "orleansmc.realms.set_monster_spawn":
+    description: "Allows access to mob spawn setting."
+    default: op
+  "orleansmc.realms.increase_member_count":
+    description: "Allows access to increase member count setting."
+    default: op
+  "orleansmc.realms.increase_member_count.<number>":
+    description: "Before to use this add increase_member_count permission"
+    default: op
+  "orleansmc.realms.delete_own_realm":
+    description: "Allows access to delete realm."
+    default: op
+  "orleansmc.outland.access":
+    description: "Allows access to outland."
+    default: op
+  "orleansmc.back_price.bypass":
+    description: "Allows access to back price bypass."
+    default: op

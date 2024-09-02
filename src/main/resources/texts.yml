@@ -1,0 +1,96 @@
+realm-creation-pending:
+  tr: "<color:#FF0000>Diyar oluşturma işlemi devam ediyor. Lütfen bekleyin...</color>"
+  en: "<color:#FF0000>Realm creation is in progress. Please wait...</color>"
+another-realm-creation-pending:
+  tr: "<color:#ffdd00>Başka bir diyar oluşturma işlemi devam ediyor!</color>\n<color:#BFBFBF>Sıraya alındınız. Lütfen bekleyin...</color>"
+  en: "<color:#ffdd00>Another realm creation is in progress!</color>\n<color:#BFBFBF>You have been queued. Please wait...</color>"
+realm-queue-remaining:
+  tr: "<color:#d103ff>Size kalan diyar oluşturma işlemi: {index}</color>"
+  en: "<color:#d103ff>Realm creation in queue: {index}</color>"
+realm-creation-progress:
+  tr: "<color:#596dff>Diyar oluşturuluyor... %{progress}</color>"
+  en: "<color:#596dff>Realm is creating... {progress}%</color>"
+realm-creation-success:
+  tr: "<color:#00FF00>Diyar başarıyla oluşturuldu!</color>"
+  en: "<color:#00FF00>Realm has been successfully created!</color>"
+realm-command-usage-create:
+  tr: "<color:#FF0000>Doğru kullanım: /diyar oluştur <iklim></color>"
+  en: "<color:#FF0000>Correct usage: /realm create <iklim></color>"
+realm-command-usage-teleport:
+  tr: "<color:#FF0000>Doğru kullanım: /diyar git <oyuncu></color>"
+  en: "<color:#FF0000>Correct usage: /realm teleport <player></color>"
+realm-command-usage-ban:
+  tr: "<color:#FF0000>Doğru kullanım: /diyar yasakla <oyuncu> <diyar></color>"
+  en: "<color:#FF0000>Correct usage: /realm ban <player> <realm></color>"
+realm-command-usage-unban:
+  tr: "<color:#FF0000>Doğru kullanım: /diyar yasak-kaldır <oyuncu> <diyar></color>"
+  en: "<color:#FF0000>Correct usage: /realm unban <player> <realm></color>"
+realm-command-usage-member:
+  tr: "<color:#FF0000>Doğru kullanım: /diyar üye <oyuncu> <eylem> <diyar></color>"
+  en: "<color:#FF0000>Correct usage: /realm member <player> <action> <realm></color>"
+realm-command-usage-member-add:
+  tr: "<color:#FF0000>Doğru kullanım: /diyar üye ekle <oyuncu> <rütbe> <diyar></color>"
+  en: "<color:#FF0000>Correct usage: /realm member add <player> <rank> <realm></color>"
+realm-command-usage-member-remove:
+  tr: "<color:#FF0000>Doğru kullanım: /diyar üye çıkar <oyuncu> <diyar></color>"
+  en: "<color:#FF0000>Correct usage: /realm member remove <player> <realm></color>"
+realm-command-usage-member-rank:
+  tr: "<color:#FF0000>Doğru kullanım: /diyar üye rütbe <oyuncu> <rütbe> <diyar></color>"
+  en: "<color:#FF0000>Correct usage: /realm member rank <player> <rank> <realm></color>"
+realm-command-usage-visitor:
+  tr: "<color:#FF0000>Doğru kullanım: /diyar ziyaretçi <izin> <diyar></color>"
+  en: "<color:#FF0000>Correct usage: /realm visitor <permission> <realm></color>"
+visitor-permission-change-success:
+  tr: "<color:#00FF00>Ziyaretçi izni başarıyla değiştirildi!</color>"
+  en: "<color:#00FF00>Visitor permission has been successfully changed!</color>"
+already-have-realm:
+  tr: "<color:#FF0000>Zaten bir diyarınız var!</color>"
+  en: "<color:#FF0000>You already have a realm!</color>"
+realm-deleted-success:
+  tr: "<color:#00FF00>Diyar başarıyla silindi!</color>"
+  en: "<color:#00FF00>Realm has been successfully deleted!</color>"
+dont-have-realm:
+  tr: "<color:#FF0000>Diyarınız bulunmamaktadır!</color>"
+  en: "<color:#FF0000>You don't have a realm!</color>"
+member-rank-change-success:
+  tr: "<color:#00FF00>{player} adlı oyuncunun rütbesi başarıyla değiştirildi!</color>"
+  en: "<color:#00FF00>Rank of {player} has been successfully changed!</color>"
+you-are-a-worker-so-you-cant-do-that:
+  tr: "<color:#FF0000>İşçi olduğunuz için bu işlemi gerçekleştiremezsiniz!</color>"
+  en: "<color:#FF0000>You can't do that because you are a worker!</color>"
+you-are-banned-from-realm:
+  tr: "<color:#FF0000>Diyardan yasaklandınız!</color>"
+  en: "<color:#FF0000>You have been banned from the realm!</color>"
+this-player-already-banned:
+  tr: "<color:#FF0000>Bu oyuncu zaten diyardan yasaklanmış!</color>"
+  en: "<color:#FF0000>This player is already banned from the realm!</color>"
+this-player-not-banned:
+  tr: "<color:#FF0000>Bu oyuncu diyardan yasaklı değil!</color>"
+  en: "<color:#FF0000>This player is not banned from the realm!</color>"
+this-realm-not-receiving-visitors:
+  tr: "<color:#FF0000>Bu diyar ziyaretçi kabul etmiyor!</color>"
+  en: "<color:#FF0000>This realm is not receiving visitors!</color>"
+realm-member-ranked-success:
+  tr: "<color:#00FF00>{player} adlı oyuncunun rütbesi başarıyla değiştirildi!</color>"
+  en: "<color:#00FF00>Rank of {player} has been successfully changed!</color>"
+realm-member-removed-success:
+  tr: "<color:#00FF00>{player} adlı oyuncu diyardan başarıyla çıkarıldı!</color>"
+  en: "<color:#00FF00>{player} has been successfully removed from the realm!</color>"
+realm-member-invited-success:
+  tr: "<color:#00FF00>{player} adlı oyuncu diyara başarıyla davet edildi!</color>"
+  en: "<color:#00FF00>{player} has been successfully invited to the realm!</color>"
+realm-member-invite-accepted:
+  tr: "<color:#00FF00>{player} adlı oyuncu diyar davetinizi kabul etti!</color>"
+  en: "<color:#00FF00>{player} has accepted your realm invitation!</color>"
+member-banned-success:
+  tr: "<color:#00FF00>{player} adlı oyuncu diyardan başarıyla yasaklandı!</color>"
+  en: "<color:#00FF00>{player} has been successfully banned from the realm!</color>"
+member-unbanned-success:
+  tr: "<color:#00FF00>{player} adlı oyuncunun diyardan yasağı başarıyla kaldırıldı!</color>"
+  en: "<color:#00FF00>{player} has been successfully unbanned from the realm!</color>"
+you-can-ban-only-20-players:
+  tr: "<color:#FF0000>En fazla 20 oyuncuyu yasaklayabilirsiniz!</color>"
+  en: "<color:#FF0000>You can ban only 20 players!</color>"
+realm-invite-timeout:
+  tr: "<color:#FF0000>Davet süresi doldu: {player}</color>"
+  en: "<color:#FF0000>Invite timeout: {player}</color>"

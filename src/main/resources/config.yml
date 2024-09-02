@@ -1,0 +1,11 @@
+server-name: '{SERVER_NAME}'
+world-name: '{WORLD_NAME}'
+realm-radius:
+  default: 75
+  increase-150-price: 2500
+  increase-250-price: 3000
+  increase-500-price: 15000
+realm-member-count:
+  default: 3
+  increase-price: 500
+back-to-death-location-price: 100
