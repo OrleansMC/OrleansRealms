@@ -55,6 +55,14 @@ public class Util {
         return new int[]{Integer.parseInt(regionCoordinates[0]), Integer.parseInt(regionCoordinates[1])};
     }
 
+    public static String getFirstHexColor(String input) {
+        // Hex kodlarını yakalamak için regex deseni
+        String hexPattern = "#[A-Fa-f0-9]{6}";
+        // İlk hex kodunu döndürme
+        Matcher matcher = Pattern.compile(hexPattern).matcher(input);
+        return matcher.find() ? matcher.group() : null;
+    }
+
     public static ImmutableList<String> getAllPlayers(OrleansRealms plugin) {
         return ImmutableList.copyOf(plugin.serversManager.getServerStates().values().stream().map(serverState -> serverState.players).reduce(new ArrayList<>(), (players, players2) -> {
             players.addAll(players2);
@@ -98,7 +106,7 @@ public class Util {
         // Get the offline player
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
         // Get the player prefix
-        String input = PlaceholderAPI.setPlaceholders(offlinePlayer, "%vault_prefix%");
+        String input = PlaceholderAPI.setPlaceholders(offlinePlayer, "%realms_prefix%");
         // Regex to match the color code pattern
         Pattern pattern = Pattern.compile("#([a-fA-F0-9]{6})");
         Matcher matcher = pattern.matcher(input);

@@ -6,6 +6,7 @@ import com.orleansmc.bukkit.players.models.PlayerAlertModel;
 import com.orleansmc.common.servers.ServerType;
 import com.orleansmc.realms.OrleansRealms;
 import com.orleansmc.realms.configs.spawn.Spawn;
+import com.orleansmc.realms.managers.LuckPermsManager;
 import com.orleansmc.realms.utils.Util;
 import com.orleansmc.realms.configs.settings.Settings;
 import com.orleansmc.realms.configs.texts.Texts;
@@ -464,6 +465,25 @@ public class RealmListener implements Listener {
             player.setPlayerTime(Util.getTimeByRealmTimeType(realm.time), false);
         } else {
             player.resetPlayerTime();
+        }
+
+        boolean updateRealm = false;
+        if (!realm.monster_spawn) {
+            OfflinePlayer owner = Bukkit.getOfflinePlayer(realm.owner);
+            if (!LuckPermsManager.hasPermission(owner, "orleansmc.realms.set_monster_spawn")) {
+                realm.monster_spawn = true;
+                updateRealm = true;
+            }
+        }
+        if (!realm.time.equals(RealmTime.CYCLE)) {
+            OfflinePlayer owner = Bukkit.getOfflinePlayer(realm.owner);
+            if (!LuckPermsManager.hasPermission(owner, "orleansmc.realms.set_time")) {
+                realm.time = RealmTime.CYCLE;
+                updateRealm = true;
+            }
+        }
+        if (updateRealm) {
+            plugin.realmsManager.saveRealm(realm);
         }
         plugin.getLogger().info("Player teleported: " + event.getPlayer().getName());
     }

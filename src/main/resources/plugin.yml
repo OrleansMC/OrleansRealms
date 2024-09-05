@@ -28,11 +28,11 @@ permissions:
   "orleansmc.realms.set_monster_spawn":
     description: "Allows access to mob spawn setting."
     default: op
-  "orleansmc.realms.increase_member_count":
-    description: "Allows access to increase member count setting."
-    default: op
   "orleansmc.realms.increase_member_count.<number>":
-    description: "Before to use this add increase_member_count permission"
+    description: "Allows access to increase member count."
+    default: op
+  "orleansmc.realms.unlocked_realm_radius.<number>":
+    description: "Allows access to increase realm radius."
     default: op
   "orleansmc.realms.delete_own_realm":
     description: "Allows access to delete realm."
@@ -42,4 +42,7 @@ permissions:
     default: op
   "orleansmc.back_price.bypass":
     description: "Allows access to back price bypass."
+    default: op
+  "orleansmc.realms.rgb_name":
+    description: "Allows access to RGB name."
     default: op

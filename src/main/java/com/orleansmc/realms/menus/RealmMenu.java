@@ -174,7 +174,7 @@ public class RealmMenu extends SuperMenu {
         if (skullMeta != null) {
             OfflinePlayer owner = Bukkit.getOfflinePlayer(realmModel.owner);
             //skullMeta.setOwningPlayer(owner);
-            String ownerPrefix = PlaceholderAPI.setPlaceholders(owner, "%vault_prefix%");
+            String ownerPrefix = PlaceholderAPI.setPlaceholders(owner, "%realms_prefix%");
             String ownerColorCode = Util.getColorCodeFromPlayerPrefix(realmModel.owner);
             String hexColor = ownerColorCode.replace("§x", "#").replaceAll("§", "");
             skullMeta.displayName(title("<white>" + Util.removeHexCodes(ownerPrefix) + "</white> " + "<color:" + hexColor + ">" + realmModel.owner + "</color>"));

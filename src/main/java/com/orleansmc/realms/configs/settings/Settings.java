@@ -39,7 +39,7 @@ public class Settings {
 
     public static int getAllowedMemberCount(RealmModel realm) {
         OfflinePlayer owner = Bukkit.getOfflinePlayer(realm.owner);
-        int allowed = LuckPermsManager.getBenefitLevel(owner, "increase_member_count", 0);
+        int allowed = LuckPermsManager.getBenefitLevel(owner, "increase_member_count", 0, 1);
         if (allowed == 0 && realm.allowed_member_count == 0) {
             return DEFAULT_REALM_MEMBER_COUNT;
         }
@@ -54,7 +54,8 @@ public class Settings {
 
     public static int getUnlockedRealmRadius(RealmModel realm) {
         OfflinePlayer owner = Bukkit.getOfflinePlayer(realm.owner);
-        int allowed = LuckPermsManager.getBenefitLevel(owner, "unlocked_realm_radius", 0);
+        int allowed = LuckPermsManager.getBenefitLevelWithValues(owner, "unlocked_realm_radius", 0,
+                new int[]{1500, 1000, 500, 300, 250, 150});
         return Math.max(realm.unlocked_radius, allowed);
     }
 }

@@ -41,6 +41,10 @@ public class LuckPermsManager {
         return user.getPrimaryGroup();
     }
 
+    public static boolean hasPermission(OfflinePlayer player, String permission) {
+        return perms.playerHas(null, player, permission);
+    }
+
     public static boolean hasVIP(Player player) {
         Track track = api.getTrackManager().getTrack(vipTrackID);
         if (track == null) {
@@ -60,16 +64,23 @@ public class LuckPermsManager {
     }
 
     public static boolean hasBenefit(Player player, String benefit) {
-        return player.hasPermission("benefit." + benefit);
+        return player.hasPermission("orleansmc.realms." + benefit);
     }
 
-    public static int getBenefitLevel(OfflinePlayer player, String benefit, int defaultValue) {
+    public static int getBenefitLevelWithValues(OfflinePlayer player, String benefit, int defaultValue, int[] values) {
         String worldName = player.isOnline() ? Objects.requireNonNull(player.getPlayer()).getWorld().getName() : plugin.entityLagManager.world.getName();
-        if (perms.playerHas(worldName, player, "orleansmc.realms." + benefit)) {
-            return defaultValue;
+        for (int value : values) {
+            if (perms.playerHas(worldName, player, "orleansmc.realms." + benefit + "." + value)) {
+                return value;
+            }
         }
-        for (int i = 200; i > 0 ; i--) {
-            if (perms.playerHas(worldName, player, "orleansmc.realms." + benefit + "." + i)) {
+        return defaultValue;
+    }
+
+    public static int getBenefitLevel(OfflinePlayer player, String benefit, int defaultValue, int multiplier) {
+        String worldName = player.isOnline() ? Objects.requireNonNull(player.getPlayer()).getWorld().getName() : plugin.entityLagManager.world.getName();
+        for (int i = 20; i > 0 ; i--) {
+            if (perms.playerHas(worldName, player, "orleansmc.realms." + benefit + "." + i * multiplier)) {
                 return i;
             }
         }

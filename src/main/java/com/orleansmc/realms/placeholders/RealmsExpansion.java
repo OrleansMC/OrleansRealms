@@ -2,6 +2,7 @@ package com.orleansmc.realms.placeholders;
 
 import com.orleansmc.common.servers.ServerType;
 import com.orleansmc.realms.OrleansRealms;
+import com.orleansmc.realms.managers.LuckPermsManager;
 import com.orleansmc.realms.managers.QuestManager;
 import com.orleansmc.realms.utils.Util;
 import com.orleansmc.realms.configs.settings.Settings;
@@ -64,6 +65,28 @@ public class RealmsExpansion extends PlaceholderExpansion {
         }
 
         switch (params) {
+            case "prefix" -> {
+                String vaultPrefix = PlaceholderAPI.setPlaceholders(player, "%vault_prefix%");
+                if (LuckPermsManager.hasPermission(player, "orleansmc.realms.rgb_name") && !player.isOp()) {
+                    String hexColor = Util.getFirstHexColor(vaultPrefix);
+                    if (hexColor == null) {
+                        return vaultPrefix;
+                    }
+                    return vaultPrefix.replace(hexColor, "#f0f01c");
+                }
+                return vaultPrefix;
+            }
+            case "chatprefix" -> {
+                String vaultPrefix = PlaceholderAPI.setPlaceholders(player, "%luckperms_meta_chatprefix%");
+                if (LuckPermsManager.hasPermission(player, "orleansmc.realms.rgb_name") && !player.isOp()) {
+                    String hexColor = Util.getFirstHexColor(vaultPrefix);
+                    if (hexColor == null) {
+                        return vaultPrefix;
+                    }
+                    return vaultPrefix.replace(hexColor, "#f0f01c");
+                }
+                return vaultPrefix;
+            }
             case "pretty_gem" -> {
                 Player onlinePlayer = player.getPlayer();
                 if (onlinePlayer == null) {
