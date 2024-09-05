@@ -222,7 +222,8 @@ public class RealmCommand {
                             case "oluştur":
                                 String climate = args.size() > 1 ? args.get(1).toLowerCase() : null;
                                 if (climate == null) {
-                                    new SelectClimateMenu(player, plugin, null).open();
+                                    Bukkit.getScheduler().runTask(plugin, () ->
+                                            new SelectClimateMenu(player, plugin, null).open());
                                     return;
                                 }
                                 handleCreateRealm(player, climate);
@@ -236,7 +237,9 @@ public class RealmCommand {
 
                                 RealmModel realm = plugin.realmsManager.getRealm(realmOwner);
                                 if (realm == null) {
-                                    new SelectClimateMenu(player, plugin, null).open();
+
+                                    Bukkit.getScheduler().runTask(plugin, () ->
+                                            new SelectClimateMenu(player, plugin, null).open());
                                     return;
                                 }
 
@@ -280,7 +283,8 @@ public class RealmCommand {
                                 break;
                             case "settings":
                             case "ayarlar":
-                                new RealmSettingsMenu(player, plugin, null).open();
+                                Bukkit.getScheduler().runTask(plugin, () ->
+                                        new RealmSettingsMenu(player, plugin, null).open());
                                 break;
                             case "leave":
                             case "ayrıl":

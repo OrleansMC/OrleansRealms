@@ -62,6 +62,24 @@ public class Util {
         }));
     }
 
+    public static String formatTime(long ms) {
+        long secNum = ms / 1000;
+        long days = secNum / 86400;
+        long hours = (secNum - (days * 86400)) / 3600;
+        long minutes = (secNum - (days * 86400) - (hours * 3600)) / 60;
+        long seconds = secNum - (days * 86400) - (hours * 3600) - (minutes * 60);
+
+        StringBuilder result = new StringBuilder();
+        if (days > 0) result.append(days).append(" Gün");
+        if (hours > 0) result.append((!result.isEmpty() ? ", " : "")).append(hours).append(" Saat");
+        if (minutes > 0 && (days == 0 || hours == 0))
+            result.append((!result.isEmpty() ? ", " : "")).append(minutes).append(" Dakika");
+        if (seconds > 0 && (hours == 0 || minutes == 0))
+            result.append((!result.isEmpty() ? ", " : "")).append(seconds).append(" Saniye");
+
+        return result.toString();
+    }
+
     public static String hexToMinecraftStyle(String hexColor) {
         final String hex = hexColor.substring(1); // remove the #
         StringBuilder minecraftFormat = new StringBuilder("§x");

@@ -1,8 +1,11 @@
 package com.orleansmc.realms.managers;
 
+import com.orleansmc.common.servers.ServerState;
 import com.orleansmc.realms.OrleansRealms;
 import com.orleansmc.realms.configs.settings.Settings;
+import com.orleansmc.realms.models.config.TextModel;
 import com.orleansmc.realms.utils.Util;
+import com.orleansmc.common.redis.RedisProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -14,12 +17,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class EntityLagManager implements Listener {
+    private final RedisProvider redis;
     private final OrleansRealms plugin;
+    // 10 minutes
+    private final int ITEM_CLEANUP_INTERVAL = 1000 * 60 * 10;
     public final World world;
 
     public EntityLagManager(OrleansRealms plugin) {
         plugin.getLogger().info("EntityLagManager loaded.");
         this.plugin = plugin;
+        this.redis = plugin.getService(RedisProvider.class);
         plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
             if (plugin.getServer().getTPS()[0] < 18.5) {
                 plugin.getLogger().warning("Server TPS is below 18.5. Removing entities.");
@@ -27,12 +34,63 @@ public class EntityLagManager implements Listener {
             }
         }, 0, 20 * 2);
 
+        plugin.getServer().getScheduler().runTaskTimer(plugin, this::checkItemCleanUp, 0, 20 * 30);
         plugin.getServer().getScheduler().runTaskTimer(plugin, this::detectEntities, 0, 20 * 20);
 
         world = Bukkit.getWorld(Settings.WORLD_NAME);
         if (world == null) {
             throw new RuntimeException("World " + Settings.WORLD_NAME + " not found");
         }
+    }
+
+    public void checkItemCleanUp() {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            ServerState anyServer = plugin.serversManager.serversProvider.getAnyServer();
+            String lastCleanUpDate = redis.get("last_item_cleanup");
+            if (lastCleanUpDate == null || Long.parseLong(lastCleanUpDate) < System.currentTimeMillis() - (ITEM_CLEANUP_INTERVAL + 10 * 1000)) {
+                if (anyServer != null && anyServer.name.equals(Settings.SERVER_NAME)) {
+                    plugin.getLogger().info("The last item cleanup was more than 10 minutes ago. New value forced.");
+                    redis.set("last_item_cleanup", String.valueOf(System.currentTimeMillis()));
+                    return;
+                }
+            }
+
+            if (lastCleanUpDate != null && Long.parseLong(lastCleanUpDate) > System.currentTimeMillis() - ITEM_CLEANUP_INTERVAL) {
+                long timeLeft = ITEM_CLEANUP_INTERVAL - (System.currentTimeMillis() - Long.parseLong(lastCleanUpDate));
+                if (timeLeft / 1000 == 120 || timeLeft / 1000 == 30) {
+                    String formattedTime = Util.formatTime(timeLeft);
+                    String message = Util.getExclamation() + "Yerdeki eşyaların temizlenmesine <color:#ff0000>" + formattedTime + "</color> kaldı.";
+                    plugin.realmsManager.messageManager.sendMessage(
+                            "all",
+                            new TextModel(message, message)
+                    );
+                }
+                return;
+            }
+
+            if (anyServer != null && anyServer.name.equals(Settings.SERVER_NAME)) {
+                plugin.getLogger().info("Cleaning up items.");
+                String message = Util.getExclamation() + "<color:#ff0000>Yerdeki eşyalar temizlendi.</color>";
+                plugin.realmsManager.messageManager.sendMessage(
+                        "all",
+                        new TextModel(message, message)
+                );
+                redis.set("last_item_cleanup", String.valueOf(System.currentTimeMillis()));
+            }
+
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                for (Chunk chunk : world.getLoadedChunks()) {
+                    for (Entity entity : chunk.getEntities()) {
+                        if (entity instanceof Item item) {
+                            ItemStack itemStack = item.getItemStack();
+                            if (itemStack.getAmount() <= 0) {
+                                item.remove();
+                            }
+                        }
+                    }
+                }
+            });
+        });
     }
 
     public void detectEntities() {
@@ -115,7 +173,6 @@ public class EntityLagManager implements Listener {
                 }
             }
         });
-
     }
 
     public void removeEntities() {
