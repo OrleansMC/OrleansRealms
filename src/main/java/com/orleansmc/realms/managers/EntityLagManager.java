@@ -11,7 +11,6 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,7 +33,7 @@ public class EntityLagManager implements Listener {
             }
         }, 0, 20 * 2);
 
-        plugin.getServer().getScheduler().runTaskTimer(plugin, this::checkItemCleanUp, 0, 20 * 30);
+        plugin.getServer().getScheduler().runTaskTimer(plugin, this::checkItemCleanUp, 0, 20 * 10);
         plugin.getServer().getScheduler().runTaskTimer(plugin, this::detectEntities, 0, 20 * 20);
 
         world = Bukkit.getWorld(Settings.WORLD_NAME);
@@ -44,6 +43,12 @@ public class EntityLagManager implements Listener {
     }
 
     public void checkItemCleanUp() {
+        this.world.setTime(
+                plugin.serversManager.serversProvider
+                        .getAvailableServerByType(
+                                plugin.serversManager.getCurrentServerType()
+                        ).time
+        );
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             ServerState anyServer = plugin.serversManager.serversProvider.getAnyServer();
             String lastCleanUpDate = redis.get("last_item_cleanup");
@@ -70,7 +75,7 @@ public class EntityLagManager implements Listener {
 
             if (anyServer != null && anyServer.name.equals(Settings.SERVER_NAME)) {
                 plugin.getLogger().info("Cleaning up items.");
-                String message = Util.getExclamation() + "<color:#ff0000>Yerdeki eşyalar temizlendi.</color>";
+                String message = Util.getExclamation() + "<color:#ff0000>Yerdeki eşyalar temizlendi!</color>";
                 plugin.realmsManager.messageManager.sendMessage(
                         "all",
                         new TextModel(message, message)
@@ -79,13 +84,10 @@ public class EntityLagManager implements Listener {
             }
 
             Bukkit.getScheduler().runTask(plugin, () -> {
-                for (Chunk chunk : world.getLoadedChunks()) {
-                    for (Entity entity : chunk.getEntities()) {
-                        if (entity instanceof Item item) {
-                            ItemStack itemStack = item.getItemStack();
-                            if (itemStack.getAmount() <= 0) {
-                                item.remove();
-                            }
+                for (Entity entity : world.getEntities()) {
+                    if (entity instanceof Item item) {
+                        if (item.getTicksLived() > 20 * 60) {
+                            item.remove();
                         }
                     }
                 }
