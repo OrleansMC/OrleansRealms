@@ -155,8 +155,11 @@ public class OutlandManager implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerDeath(PlayerDeathEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
         Player player = event.getEntity();
         if (waitingForRandomTeleport.contains(player.getName())) {
             event.setCancelled(true);

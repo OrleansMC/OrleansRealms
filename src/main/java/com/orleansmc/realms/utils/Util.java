@@ -70,6 +70,11 @@ public class Util {
         }));
     }
 
+    public static String getString(Component component) {
+        final MiniMessage mm = MiniMessage.miniMessage();
+        return mm.serialize(component);
+    }
+
     public static String formatTime(long ms) {
         long secNum = ms / 1000;
         long days = secNum / 86400;

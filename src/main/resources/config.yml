@@ -2,10 +2,13 @@ server-name: '{SERVER_NAME}'
 world-name: '{WORLD_NAME}'
 realm-radius:
   default: 75
-  increase-150-price: 2500
-  increase-250-price: 3000
-  increase-500-price: 15000
+  increase-150-price: 7500
+  increase-250-price: 11400
+  increase-500-price: 45000
 realm-member-count:
   default: 3
   increase-price: 500
 back-to-death-location-price: 100
+realm-webhook-url: 'https://discord.com/api/webhooks/1281712071431557182/lv9BcwTttUu2eOjf1HTzSHG5H0i8S4uwmlrBOv_Nv5JrFGU02TEgomkrbpSI16O6Mfhr'
+redstone-alert-webhook-url: 'https://discord.com/api/webhooks/1281712168340815935/bcvMZqeeySIIEOJM8ilQUnZp7dGi5C4wkj0DtEpgd-REgwzpr37-3l_1Nla7h9AvbwyD'
+death-webhook-url: 'https://discord.com/api/webhooks/1281716069211312148/TfSI9aRzikQ6_9VWu4fZlROmtcqCLl6toORgE0mg6M-AiN-FvVflRzNF35rPJw2a853Z'

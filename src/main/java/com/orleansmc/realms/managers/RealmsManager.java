@@ -473,6 +473,7 @@ public class RealmsManager {
 
             if (Settings.SERVER_NAME.equals(realm.server)) {
                 showUpAllay(realm, 0);
+                WebhookManager.sendRealmCreateWebhook(realm);
             }
 
             plugin.getLogger().info("Realm for " + realm.owner + " is created");
@@ -490,6 +491,7 @@ public class RealmsManager {
 
                 RegionManager.unloadAndDeleteRegion(center.getWorld(), Integer.parseInt(realm.region.split(",")[0]), Integer.parseInt(realm.region.split(",")[1]), true);
                 databaseManager.deleteRealm(realm.owner);
+                WebhookManager.sendRealmDeleteWebhook(realm);
                 channelAgent.getChannel().sendMessage(new RealmStateModel(realm, RealmState.DELETED));
             } else {
                 plugin.getLogger().info("Waiting realm deletion for " + realm.owner + " in region " + realm.region + " with climate " + realm.climate + " to " + realm.server);

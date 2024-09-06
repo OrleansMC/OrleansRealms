@@ -74,6 +74,7 @@ public class RedstoneManager implements Listener {
 
             if (!notifiedRealms.getOrDefault(realm.owner, false)) {
                 notifiedRealms.put(realm.owner, true);
+                WebhookManager.sendRedstoneExceedLimitWebhook(realm);
                 for (RealmMemberModel member : realm.members) {
                     Player player = Bukkit.getPlayer(member.name);
                     if (player != null && !notifiedPlayers.getOrDefault(player.getName(), false) && player.getLocation().distance(block.getLocation()) < 150) {

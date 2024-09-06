@@ -7,6 +7,7 @@ import com.orleansmc.common.servers.ServerType;
 import com.orleansmc.realms.OrleansRealms;
 import com.orleansmc.realms.configs.spawn.Spawn;
 import com.orleansmc.realms.managers.LuckPermsManager;
+import com.orleansmc.realms.managers.WebhookManager;
 import com.orleansmc.realms.utils.Util;
 import com.orleansmc.realms.configs.settings.Settings;
 import com.orleansmc.realms.configs.texts.Texts;
@@ -27,6 +28,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -113,6 +115,7 @@ public class RealmListener implements Listener {
                         .min((s1, s2) -> s2.players.size() - s1.players.size())
                         .orElse(null)).name),
                 20L * 2);
+        WebhookManager.sendPlayerDeathWebhook(player, event.deathMessage(), event.getPlayer().getLocation());
     }
 
     @EventHandler
@@ -355,6 +358,14 @@ public class RealmListener implements Listener {
     }
 
     @EventHandler
+    public void onAnimalBreed(EntityBreedEvent event) {
+        if (plugin.serversManager.getCurrentServerType() != ServerType.REALMS) return;
+        if (!event.getEntity().getWorld().getName().equals(Settings.WORLD_NAME)) return;
+
+        event.setCancelled(true);
+    }
+
+    @EventHandler
     public void onBlockBreakEvent(BlockBreakEvent event) {
         if (plugin.serversManager.getCurrentServerType() != ServerType.REALMS) return;
         if (!event.getPlayer().getWorld().getName().equals(Settings.WORLD_NAME)) return;
@@ -390,6 +401,11 @@ public class RealmListener implements Listener {
         RealmModel realm = plugin.realmsManager.getRealmByLocation(event.getLocation());
 
         if (realm == null) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (event.getEntity().getEntitySpawnReason() == CreatureSpawnEvent.SpawnReason.SPAWNER) {
             event.setCancelled(true);
             return;
         }

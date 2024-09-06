@@ -18,12 +18,12 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MainListener implements Listener {
     private final OrleansRealms plugin;
-    private final List<String> replacedCustomBlockLocations = new ArrayList<>();
+    private final List<String> replacedCustomBlockLocations = new CopyOnWriteArrayList<>();
 
     public MainListener(OrleansRealms plugin) {
         this.plugin = plugin;
@@ -57,11 +57,10 @@ public class MainListener implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
-        if (replacedCustomBlockLocations.contains(Util.getStringFromLocation(block.getLocation()))) {
+        String blockLocationString = block.getX() + ":" + block.getY() + ":" + block.getZ();
+        if (replacedCustomBlockLocations.contains(blockLocationString)) {
             block.setType(Material.AIR);
-            replacedCustomBlockLocations.remove(
-                    Util.getStringFromLocation(block.getLocation())
-            );
+            replacedCustomBlockLocations.remove(blockLocationString);
             event.setCancelled(true);
         }
     }
@@ -71,17 +70,31 @@ public class MainListener implements Listener {
         Location location = event.getBlock().getLocation().clone();
         Block upperBlock = location.getWorld().getBlockAt(location.getBlockX(), location.getBlockY() + 1, location.getBlockZ());
 
+        int highBlockY = location.getWorld().getHighestBlockAt(location.getBlockX(), location.getBlockZ()).getY();
+        if (location.getBlockY() - 1 == highBlockY) {
+            return;
+        }
+
         if (upperBlock.getType().isAir()) {
             upperBlock.setType(Material.TRIPWIRE);
-            replacedCustomBlockLocations.add(
-                    Util.getStringFromLocation(upperBlock.getLocation())
-            );
+            String upperBlockLocationString = upperBlock.getX() + ":" + upperBlock.getY() + ":" + upperBlock.getZ();
+            replacedCustomBlockLocations.add(upperBlockLocationString);
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                replacedCustomBlockLocations.remove(
-                        Util.getStringFromLocation(upperBlock.getLocation())
-                );
-                upperBlock.setType(Material.AIR);
-            }, 4L);
+                removeReplacedBlock(upperBlock);
+            }, 10L);
+        } else if (upperBlock.getType().equals(Material.TRIPWIRE)) {
+            event.setCancelled(true);
+        }
+    }
+
+    private void removeReplacedBlock(Block upperBlock) {
+        Block newBlock = upperBlock.getWorld().getBlockAt(upperBlock.getX(), upperBlock.getY(), upperBlock.getZ());
+        String upperBlockLocationString = upperBlock.getX() + ":" + upperBlock.getY() + ":" + upperBlock.getZ();
+        if (replacedCustomBlockLocations.contains(upperBlockLocationString)) {
+            if (newBlock.getType().equals(Material.TRIPWIRE)) {
+                newBlock.setType(Material.AIR);
+            }
+            replacedCustomBlockLocations.remove(upperBlockLocationString);
         }
     }
 

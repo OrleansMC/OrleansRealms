@@ -21,6 +21,9 @@ public class Settings {
     public static int REALM_RADIUS_INCREASE_250_PRICE = 3000;
     public static int REALM_RADIUS_INCREASE_500_PRICE = 15000;
     public static int BACK_TO_DEATH_LOCATION_PRICE = 100;
+    public static String REALM_WEBHOOK_URL;
+    public static String REDSTONE_ALERT_WEBHOOK_URL;
+    public static String DEATH_WEBHOOK_URL;
 
     public static void load(YamlConfiguration configFile) {
         SERVER_NAME = configFile.getString("server-name", SERVER_NAME);
@@ -35,6 +38,10 @@ public class Settings {
         REALM_RADIUS_INCREASE_250_PRICE = configFile.getInt("realm-radius.increase-250-price", REALM_RADIUS_INCREASE_250_PRICE);
         REALM_RADIUS_INCREASE_500_PRICE = configFile.getInt("realm-radius.increase-500-price", REALM_RADIUS_INCREASE_500_PRICE);
         BACK_TO_DEATH_LOCATION_PRICE = configFile.getInt("back-to-death-location-price", BACK_TO_DEATH_LOCATION_PRICE);
+
+        REALM_WEBHOOK_URL = configFile.getString("realm-webhook-url");
+        REDSTONE_ALERT_WEBHOOK_URL = configFile.getString("redstone-alert-webhook-url");
+        DEATH_WEBHOOK_URL = configFile.getString("death-webhook-url");
     }
 
     public static int getAllowedMemberCount(RealmModel realm) {
