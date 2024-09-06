@@ -51,29 +51,33 @@ public class EntityLagManager implements Listener {
         );
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             ServerState anyServer = plugin.serversManager.serversProvider.getAnyServer();
+            if (anyServer == null) {
+                plugin.getLogger().warning("Any server not found.");
+                return;
+            }
             String lastCleanUpDate = redis.get("last_item_cleanup");
             if (lastCleanUpDate == null || Long.parseLong(lastCleanUpDate) < System.currentTimeMillis() - (ITEM_CLEANUP_INTERVAL + 10 * 1000)) {
-                if (anyServer != null && anyServer.name.equals(Settings.SERVER_NAME)) {
+                if (anyServer.name.equals(Settings.SERVER_NAME)) {
                     plugin.getLogger().info("The last item cleanup was more than 10 minutes ago. New value forced.");
                     redis.set("last_item_cleanup", String.valueOf(System.currentTimeMillis()));
                     return;
                 }
             }
 
-            if (lastCleanUpDate != null && Long.parseLong(lastCleanUpDate) > System.currentTimeMillis() - ITEM_CLEANUP_INTERVAL) {
-                long timeLeft = ITEM_CLEANUP_INTERVAL - (System.currentTimeMillis() - Long.parseLong(lastCleanUpDate));
-                if (timeLeft / 1000 == 120 || timeLeft / 1000 == 30) {
-                    String formattedTime = Util.formatTime(timeLeft);
-                    String message = Util.getExclamation() + "Yerdeki eşyaların temizlenmesine <color:#ff0000>" + formattedTime + "</color> kaldı.";
-                    plugin.realmsManager.messageManager.sendMessage(
-                            "all",
-                            new TextModel(message, message)
-                    );
+            if (anyServer.name.equals(Settings.SERVER_NAME)) {
+                if (Long.parseLong(lastCleanUpDate) > System.currentTimeMillis() - ITEM_CLEANUP_INTERVAL) {
+                    long timeLeft = ITEM_CLEANUP_INTERVAL - (System.currentTimeMillis() - Long.parseLong(lastCleanUpDate));
+                    if (timeLeft / 1000 == 120 || timeLeft / 1000 == 30) {
+                        String formattedTime = Util.formatTime(timeLeft);
+                        String message = Util.getExclamation() + "Yerdeki eşyaların temizlenmesine <color:#ff0000>" + formattedTime + "</color> kaldı.";
+                        plugin.realmsManager.messageManager.sendMessage(
+                                "all",
+                                new TextModel(message, message)
+                        );
+                    }
+                    return;
                 }
-                return;
-            }
 
-            if (anyServer != null && anyServer.name.equals(Settings.SERVER_NAME)) {
                 plugin.getLogger().info("Cleaning up items.");
                 String message = Util.getExclamation() + "<color:#ff0000>Yerdeki eşyalar temizlendi!</color>";
                 plugin.realmsManager.messageManager.sendMessage(
