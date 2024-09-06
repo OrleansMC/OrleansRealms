@@ -124,7 +124,7 @@ public class QuestMenu extends SuperMenu {
 
         previousPageNavigator.getItems().stream().findFirst().ifPresent(item -> {
             item.setItem(getItemsAdderItem("ui:icon_back_purple", titleLegacy("Sayfa " +
-                    ((page.get() + 1) == 1 ? totalPages : page.get() + 1)
+                    ((page.get() + 1) == 1 ? totalPages : page.get())
             ), null));
         });
 
