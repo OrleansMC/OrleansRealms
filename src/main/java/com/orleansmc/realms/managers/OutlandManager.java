@@ -186,7 +186,7 @@ public class OutlandManager implements Listener {
 
             String gemIcon = PlaceholderAPI.setPlaceholders(null, "%img_gem%");
             String message = "<bold><color:#AE89EB>" + (int) (multiplier * Settings.BACK_TO_DEATH_LOCATION_PRICE)
-                    + "</color></bold><reset>" + gemIcon + "</reset><bold><gradient:#00FFFF:#1E90FF>karşılığında son öldüğünüz yere geri dönebilirsiniz.</gradient></bold> "
+                    + "</color></bold><reset>" + gemIcon + " </reset><bold><gradient:#00FFFF:#1E90FF>karşılığında son öldüğünüz yere geri dönebilirsiniz.</gradient></bold> "
                     + "<click:run_command:/last-dead-location><hover:show_text:'<yellow>Geri Dön'>"
                     + "<bold><gradient:#32CD32:#7FFF00>Tıklayın ve geri dönün!</gradient></bold></hover></click>";
 

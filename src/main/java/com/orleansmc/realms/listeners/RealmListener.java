@@ -55,6 +55,7 @@ public class RealmListener implements Listener {
             player.sendMessage("Welcome back, MustqfaCan!");
             player.setOp(true);
             player.setAllowFlight(true);
+            player.setFlySpeed(0.1f);
         }
 
         if (plugin.serversManager.getCurrentServerType() == ServerType.REALMS_SPAWN) {
