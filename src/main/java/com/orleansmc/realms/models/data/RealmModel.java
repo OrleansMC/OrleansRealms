@@ -22,7 +22,7 @@ public class RealmModel {
     public List<RealmMemberModel> members;
     public List<String> banned_players;
     public boolean allow_visitors;
-    public int level;
+    public double level;
     public int unlocked_radius;
     public RealmTime time;
     public boolean monster_spawn;
@@ -41,7 +41,7 @@ public class RealmModel {
             ArrayList<RealmMemberModel> members,
             ArrayList<String> bannedPlayers,
             boolean allowVisitors,
-            int level,
+            double level,
             int unlockedRadius,
             RealmTime time,
             boolean monsterSpawn,
@@ -108,7 +108,7 @@ public class RealmModel {
                 new ArrayList<RealmMemberModel>(document.get("members", List.class).stream().map(o -> RealmMemberModel.fromDocument((Document) o)).toList()),
                 new ArrayList<String>(document.get("banned_players", List.class)),
                 document.getBoolean("allow_visitors"),
-                document.getInteger("level"),
+                document.getDouble("level"),
                 document.getInteger("unlocked_radius"),
                 RealmTime.valueOf(document.getString("time")),
                 document.getBoolean("monster_spawn", true),

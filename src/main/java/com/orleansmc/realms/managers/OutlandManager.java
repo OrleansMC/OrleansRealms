@@ -22,6 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -34,7 +35,6 @@ import org.bukkit.potion.PotionEffectType;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 public class OutlandManager implements Listener {
@@ -134,6 +134,16 @@ public class OutlandManager implements Listener {
             if (waitingForRandomTeleport.contains(player.getName())) {
                 event.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler
+    public void onEntityTargetToPlayerEvent(EntityTargetEvent event) {
+        if (plugin.serversManager.getCurrentServerType() != ServerType.REALMS_OUTLAND) return;
+        if (!(event.getTarget() instanceof Player player)) return;
+
+        if (waitingForRandomTeleport.contains(player.getName())) {
+            event.setCancelled(true);
         }
     }
 

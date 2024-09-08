@@ -1,21 +1,18 @@
 package com.orleansmc.realms.managers;
 
+import com.google.common.util.concurrent.AtomicDouble;
 import com.orleansmc.realms.OrleansRealms;
 import com.orleansmc.realms.configs.settings.Settings;
 import com.orleansmc.realms.enums.RealmClimate;
 import com.orleansmc.realms.models.data.RealmModel;
 import com.orleansmc.realms.utils.Util;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
@@ -224,56 +221,5 @@ public class RegionManager {
         int centerZ = (start[1] + end[1]) / 2;
 
         return new Location(Bukkit.getWorld(Settings.WORLD_NAME), centerX, 0, centerZ);
-    }
-
-    public static int getRealmLevelFromRegion(int regionX, int regionZ) {
-        World realmWorld = Bukkit.getWorld(Settings.WORLD_NAME);
-        if (realmWorld == null) {
-            return 0;
-        }
-        File regionFile = new File(realmWorld.getWorldFolder(), "region/r." + regionX + "." + regionZ + ".mca");
-        File itemsadderRegionFile = new File(realmWorld.getWorldFolder(), "itemsadder/region/r." + regionX + "." + regionZ + ".pregion");
-        File poiRegionFile = new File(realmWorld.getWorldFolder(), "poi/r." + regionX + "." + regionZ + ".mca");
-        File entitiesRegionFile = new File(realmWorld.getWorldFolder(), "entities/r." + regionX + "." + regionZ + ".mca");
-        AtomicInteger level = new AtomicInteger(0);
-
-        if (regionFile.exists()) {
-            long fileSizeInBytes = regionFile.length();
-            double fileSizeInKB = (double) fileSizeInBytes / 1024;
-            double fileSizeInMB = fileSizeInKB / 1024;
-
-            int regionLevel = (int) (fileSizeInMB - 7) * 10;
-            if (regionLevel > 0) {
-                level.addAndGet(regionLevel);
-            }
-        }
-
-        if (itemsadderRegionFile.exists()) {
-            long fileSizeInBytes = itemsadderRegionFile.length();
-            double fileSizeInKB = (double) fileSizeInBytes / 1024;
-
-            int itemsAdderLevel = (int) (fileSizeInKB * 2);
-            level.addAndGet(itemsAdderLevel);
-        }
-
-        if (poiRegionFile.exists()) {
-            long fileSizeInBytes = poiRegionFile.length();
-            double fileSizeInKB = (double) fileSizeInBytes / 1024;
-
-            int poiLevel = (int) (fileSizeInKB / 10);
-            level.addAndGet(poiLevel);
-        }
-
-        if (entitiesRegionFile.exists()) {
-            long fileSizeInBytes = entitiesRegionFile.length();
-            double fileSizeInKB = (double) fileSizeInBytes / 1024;
-
-            int entitiesLevel = (int) (fileSizeInKB - 350) / 10;
-            if (entitiesLevel > 0) {
-                level.addAndGet(entitiesLevel);
-            }
-        }
-
-        return level.get();
     }
 }

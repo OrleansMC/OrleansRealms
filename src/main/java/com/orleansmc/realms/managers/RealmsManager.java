@@ -163,15 +163,22 @@ public class RealmsManager {
             countDownLatch.countDown();
         }, 20 * 2));
 
-        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+        /*Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
             var players = Bukkit.getServer().getOnlinePlayers();
-            realms.values().forEach(realm -> {
+            for (RealmModel realm : realms.values()) {
+                if (!realm.server.equals(Settings.SERVER_NAME)) {
+                    return;
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 if (players.stream().anyMatch(player -> {
                     RealmMemberModel member = realm.members.stream().filter(m -> m.name.equals(player.getName())).findFirst().orElse(null);
                     return member != null && member.rank != null;
                 })) {
-                    int[] regionCoordinates = Util.getRegionCoordinatesFromString(realm.region);
-                    int realmLevel = RegionManager.getRealmLevelFromRegion(regionCoordinates[0], regionCoordinates[1]) - realm.start_level;
+                    int realmLevel = RegionManager.getRealmLevel(realm);
                     if (realmLevel < 0) {
                         realmLevel = 0;
                     }
@@ -181,8 +188,9 @@ public class RealmsManager {
                         saveRealm(realm);
                     }
                 }
-            });
-        }, 0, 20 * 60 * 5);
+            }
+            ;
+        }, 0, 20 * 60 * 5);*/
     }
 
     public RealmModel getRealm(String playerName) {
@@ -315,6 +323,9 @@ public class RealmsManager {
 
     public RealmModel getRealmByRegionCoordinates(int regionX, int regionZ) {
         for (RealmModel realm : realms.values()) {
+            if (!realm.server.equals(Settings.SERVER_NAME)) {
+                continue;
+            }
             String[] region = realm.region.split(",");
             for (int x = -1; x <= 1; x++) {
                 for (int z = -1; z <= 1; z++) {
@@ -422,7 +433,7 @@ public class RealmsManager {
                     Location finalSpawn = spawn.getBlock().getLocation().toCenterLocation();
                     finalSpawn.setY(finalSpawn.getY() + 1.5);
                     realm.spawn = Util.getStringFromLocation(finalSpawn);
-                    realm.start_level = RegionManager.getRealmLevelFromRegion(regionCoordinates[0], regionCoordinates[1]);
+                    realm.start_level = 0;
                     databaseManager.saveRealm(realm);
                     this.channelAgent.getChannel().sendMessage(new RealmStateModel(realm, realmState.state == RealmState.UPDATE ? RealmState.UPDATE : RealmState.CREATED));
                 } catch (InterruptedException e) {

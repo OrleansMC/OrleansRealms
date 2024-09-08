@@ -6,5 +6,6 @@ public class ListenerLoader {
     public static void load(OrleansRealms plugin) {
         new MainListener(plugin);
         new RealmListener(plugin);
+        new RealmLevelListener(plugin);
     }
 }

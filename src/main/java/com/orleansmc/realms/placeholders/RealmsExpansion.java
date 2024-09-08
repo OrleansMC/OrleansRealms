@@ -150,7 +150,7 @@ public class RealmsExpansion extends PlaceholderExpansion {
                     return realm.owner;
                 }
                 case "bossbar_level" -> {
-                    return String.valueOf(realm.level);
+                    return String.valueOf((int) realm.level);
                 }
                 case "bossbar_size" -> {
                     int size = realm.radius * 2;

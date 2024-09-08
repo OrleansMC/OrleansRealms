@@ -139,7 +139,7 @@ public class RealmMenu extends SuperMenu {
                     return realm.members.stream().anyMatch(member -> member.name.equalsIgnoreCase(player.getName()));
                 }
                 return realm.allow_visitors && realm.banned_players.stream().noneMatch(bannedPlayer -> bannedPlayer.equalsIgnoreCase(player.getName()));
-            }).sorted(Comparator.comparingInt(realm -> realm.level)).forEach(realmModels::add);
+            }).sorted(Comparator.comparingDouble(realm -> realm.level)).forEach(realmModels::add);
 
             realmModels = realmModels.subList(page.get() * realmLimit, Math.min(realmModels.size(), (page.get() + 1) * realmLimit));
 
@@ -182,7 +182,7 @@ public class RealmMenu extends SuperMenu {
         }
 
         List<Component> lore = new ArrayList<>();
-        lore.add(title("Seviye: ").append(description(String.valueOf(realmModel.level))));
+        lore.add(title("Seviye: ").append(description(String.valueOf((int) realmModel.level))));
         lore.add(title("Üyeler:"));
         for (RealmMemberModel member : realmModel.members) {
             if (member.name.equals(realmModel.owner)) continue;
