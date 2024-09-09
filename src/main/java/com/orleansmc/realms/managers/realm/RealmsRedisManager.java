@@ -239,7 +239,7 @@ public class RealmsRedisManager {
         if (oldRealm.radius != realm.radius) {
             Player player = Bukkit.getPlayer(realm.owner);
             if (player != null) {
-                player.teleport(player.getLocation());
+                plugin.serversManager.teleportPlayer(player, Util.getLocationFromString(realm.spawn), Settings.REALMS_WORLD_NAME, realm.server);
             }
         }
         plugin.getLogger().info("Updating realm for " + realm.owner);

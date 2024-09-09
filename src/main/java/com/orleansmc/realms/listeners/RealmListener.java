@@ -436,9 +436,8 @@ public class RealmListener implements Listener {
         }
 
         if (
-                event.getEntity().getEntitySpawnReason() != CreatureSpawnEvent.SpawnReason.SPAWNER_EGG &&
-                        event.getEntity().getEntitySpawnReason() != CreatureSpawnEvent.SpawnReason.COMMAND &&
-                        event.getEntity().getEntitySpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM
+                (event.getEntity().getEntitySpawnReason() != CreatureSpawnEvent.SpawnReason.SPAWNER_EGG) &&
+                        (event.getEntity().getEntitySpawnReason() != CreatureSpawnEvent.SpawnReason.COMMAND)
         ) {
             if (event.getEntity() instanceof Monster && !realm.monster_spawn) {
                 event.setCancelled(true);
