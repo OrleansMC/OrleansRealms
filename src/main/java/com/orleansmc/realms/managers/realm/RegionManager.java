@@ -1,6 +1,5 @@
-package com.orleansmc.realms.managers;
+package com.orleansmc.realms.managers.realm;
 
-import com.google.common.util.concurrent.AtomicDouble;
 import com.orleansmc.realms.OrleansRealms;
 import com.orleansmc.realms.configs.settings.Settings;
 import com.orleansmc.realms.enums.RealmClimate;
@@ -8,12 +7,10 @@ import com.orleansmc.realms.models.data.RealmModel;
 import com.orleansmc.realms.utils.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
 public class RegionManager {

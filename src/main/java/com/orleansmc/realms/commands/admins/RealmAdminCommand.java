@@ -95,7 +95,7 @@ public class RealmAdminCommand {
 
     private static void changeRealmRadius(RealmModel realm, int newRadius) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            plugin.realmsManager.changeRealmRadius(realm.owner, newRadius);
+            plugin.realmsManager.realmsRedisManager.changeRealmRadius(realm.owner, newRadius);
         });
     }
 }

@@ -1,5 +1,6 @@
-package com.orleansmc.realms.managers;
+package com.orleansmc.realms.managers.common;
 
+import com.orleansmc.realms.managers.realm.RealmsManager;
 import com.orleansmc.realms.models.data.RealmModel;
 import me.lucko.helper.mongo.MongoProvider;
 import me.lucko.helper.mongo.external.bson.Document;

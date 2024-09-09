@@ -1,4 +1,4 @@
-package com.orleansmc.realms.managers;
+package com.orleansmc.realms.managers.common;
 
 import com.orleansmc.realms.OrleansRealms;
 import net.luckperms.api.LuckPerms;
@@ -8,11 +8,9 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.util.Objects;
-import java.util.Optional;
 
 
 public class LuckPermsManager {

@@ -1,4 +1,4 @@
-package com.orleansmc.realms.managers;
+package com.orleansmc.realms.managers.server;
 
 import com.orleansmc.common.servers.ServerState;
 import com.orleansmc.realms.OrleansRealms;

@@ -88,7 +88,7 @@ public class RealmBorderMenu extends SuperMenu {
                 gemCurrency.withdrawPlayer(player.getName(), Settings.REALM_RADIUS_INCREASE_150_PRICE);
             }
             plugin.realmsManager.realms.put(player.getName(), realm);
-            plugin.realmsManager.changeRealmRadius(player.getName(), 150);
+            plugin.realmsManager.realmsRedisManager.changeRealmRadius(player.getName(), 150);
             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
             IncreaseRealmSizeObjective.instance.onComplete(realm);
             player.closeInventory();
@@ -119,7 +119,7 @@ public class RealmBorderMenu extends SuperMenu {
                 creditCurrency.withdrawPlayer(player.getName(), Settings.REALM_RADIUS_INCREASE_250_PRICE);
             }
             plugin.realmsManager.realms.put(player.getName(), realm);
-            plugin.realmsManager.changeRealmRadius(player.getName(), 250);
+            plugin.realmsManager.realmsRedisManager.changeRealmRadius(player.getName(), 250);
             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
             player.closeInventory();
         });
@@ -149,7 +149,7 @@ public class RealmBorderMenu extends SuperMenu {
                 creditCurrency.withdrawPlayer(player.getName(), Settings.REALM_RADIUS_INCREASE_500_PRICE);
             }
             plugin.realmsManager.realms.put(player.getName(), realm);
-            plugin.realmsManager.changeRealmRadius(player.getName(), 500);
+            plugin.realmsManager.realmsRedisManager.changeRealmRadius(player.getName(), 500);
             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
             player.closeInventory();
         });

@@ -5,7 +5,12 @@ import com.orleansmc.realms.commands.CommandLoader;
 import com.orleansmc.realms.commands.players.RealmCommand;
 import com.orleansmc.realms.configs.ConfigLoader;
 import com.orleansmc.realms.listeners.ListenerLoader;
-import com.orleansmc.realms.managers.*;
+import com.orleansmc.realms.managers.common.GameRulesManager;
+import com.orleansmc.realms.managers.common.LuckPermsManager;
+import com.orleansmc.realms.managers.player.PlayerDataManager;
+import com.orleansmc.realms.managers.realm.RealmsManager;
+import com.orleansmc.realms.managers.realm.RegionManager;
+import com.orleansmc.realms.managers.server.*;
 import com.orleansmc.realms.placeholders.RealmsExpansion;
 import com.orleansmc.realms.quests.objectives.ObjectiveLoader;
 import dev.unnm3d.rediseconomy.api.RedisEconomyAPI;
@@ -94,11 +99,8 @@ public final class OrleansRealms extends ExtendedJavaPlugin {
     protected void disable() {
         this.getLogger().info("OrleansRealms is stopping...");
         if (this.realmsManager != null) {
-            /*World realm = Bukkit.getWorld(Settings.WORLD_NAME);
-            if (realm != null) {
-                RegionManager.unloadAndDeleteUnRealmRegions(realm);
-            }*/
-            this.realmsManager.channelAgent.close();
+            this.realmsManager.realmsRedisManager.realmStateChannelAgent.close();
+            this.realmsManager.realmsRedisManager.pendingRealmsChannelAgent.close();
             this.realmsManager.messageManager.channelAgent.close();
             this.realmsManager.realms.clear();
             RegionManager.removedRegions.clear();

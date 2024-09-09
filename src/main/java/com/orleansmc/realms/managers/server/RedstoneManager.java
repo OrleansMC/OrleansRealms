@@ -1,9 +1,9 @@
-package com.orleansmc.realms.managers;
+package com.orleansmc.realms.managers.server;
 
 import com.orleansmc.common.servers.ServerType;
 import com.orleansmc.realms.OrleansRealms;
+import com.orleansmc.realms.managers.common.WebhookManager;
 import com.orleansmc.realms.utils.Util;
-import com.orleansmc.realms.configs.settings.Settings;
 import com.orleansmc.realms.models.data.RealmMemberModel;
 import com.orleansmc.realms.models.data.RealmModel;
 import org.bukkit.Bukkit;

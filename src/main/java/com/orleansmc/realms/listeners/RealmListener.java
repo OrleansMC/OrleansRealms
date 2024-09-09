@@ -6,12 +6,12 @@ import com.orleansmc.bukkit.players.models.PlayerAlertModel;
 import com.orleansmc.common.servers.ServerType;
 import com.orleansmc.realms.OrleansRealms;
 import com.orleansmc.realms.configs.spawn.Spawn;
-import com.orleansmc.realms.managers.LuckPermsManager;
-import com.orleansmc.realms.managers.WebhookManager;
+import com.orleansmc.realms.managers.common.LuckPermsManager;
+import com.orleansmc.realms.managers.common.WebhookManager;
 import com.orleansmc.realms.utils.Util;
 import com.orleansmc.realms.configs.settings.Settings;
 import com.orleansmc.realms.configs.texts.Texts;
-import com.orleansmc.realms.managers.RegionManager;
+import com.orleansmc.realms.managers.realm.RegionManager;
 import com.orleansmc.realms.models.data.RealmMemberModel;
 import com.orleansmc.realms.models.data.RealmModel;
 import com.orleansmc.realms.enums.RealmMember;
@@ -28,21 +28,47 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 public class RealmListener implements Listener {
     private final OrleansRealms plugin;
+    List<EntityType> animals = new ArrayList<>();
 
     public RealmListener(OrleansRealms plugin) {
         this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        animals.add(EntityType.COW);
+        animals.add(EntityType.SHEEP);
+        animals.add(EntityType.PIG);
+        animals.add(EntityType.CHICKEN);
+        animals.add(EntityType.RABBIT);
+        animals.add(EntityType.HORSE);
+        animals.add(EntityType.DONKEY);
+        animals.add(EntityType.MULE);
+        animals.add(EntityType.LLAMA);
+        animals.add(EntityType.POLAR_BEAR);
+        animals.add(EntityType.PANDA);
+        animals.add(EntityType.FOX);
+        animals.add(EntityType.WOLF);
+        animals.add(EntityType.OCELOT);
+        animals.add(EntityType.CAT);
+        animals.add(EntityType.PARROT);
+        animals.add(EntityType.TURTLE);
+        animals.add(EntityType.DOLPHIN);
+        animals.add(EntityType.SQUID);
+        animals.add(EntityType.BEE);
+        animals.add(EntityType.VILLAGER);
+        animals.add(EntityType.WANDERING_TRADER);
+        animals.add(EntityType.TRADER_LLAMA);
+        animals.add(EntityType.GOAT);
     }
 
     @EventHandler(priority = org.bukkit.event.EventPriority.HIGHEST)
@@ -396,8 +422,6 @@ public class RealmListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onEntitySpawn(EntitySpawnEvent event) {
         if (plugin.serversManager.getCurrentServerType() != ServerType.REALMS) return;
-        if (!event.getEntity().getWorld().getName().equals(Settings.WORLD_NAME)) return;
-
 
         RealmModel realm = plugin.realmsManager.getRealmByLocation(event.getLocation());
 
@@ -420,15 +444,12 @@ public class RealmListener implements Listener {
                 event.setCancelled(true);
                 return;
             }
-            if (event.getEntity() instanceof Animals || event.getEntity() instanceof Villager || event.getEntity() instanceof WanderingTrader) {
+            if (animals.contains(event.getEntity().getType())) {
                 event.setCancelled(true);
-                return;
             }
-
-            if (event.getEntity() instanceof Animals) {
-                plugin.getLogger().info("Entity spawned: " + event.getEntity().getEntitySpawnReason());
-                plugin.getLogger().info("Location: " + event.getLocation().getX() + ", " + event.getLocation().getZ());
-            }
+        } else if (animals.contains(event.getEntity().getType())) {
+            plugin.getLogger().info("Entity spawned: " + event.getEntity().getEntitySpawnReason());
+            plugin.getLogger().info("Location: " + event.getLocation().getX() + ", " + event.getLocation().getZ());
         }
     }
 

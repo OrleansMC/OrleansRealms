@@ -1,4 +1,4 @@
-package com.orleansmc.realms.managers;
+package com.orleansmc.realms.managers.common;
 
 import com.orleansmc.common.webhooks.DiscordWebhook;
 import com.orleansmc.common.webhooks.WebhookProvider;

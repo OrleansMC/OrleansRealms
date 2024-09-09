@@ -1,6 +1,7 @@
-package com.orleansmc.realms.managers;
+package com.orleansmc.realms.managers.common;
 
 import com.orleansmc.realms.OrleansRealms;
+import com.orleansmc.realms.managers.realm.RealmsManager;
 import com.orleansmc.realms.models.messaging.MessageModel;
 import com.orleansmc.realms.models.config.TextModel;
 import me.lucko.helper.messaging.Channel;

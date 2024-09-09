@@ -7,7 +7,7 @@ import com.orleansmc.realms.menus.RealmSettingsMenu;
 import com.orleansmc.realms.quests.objectives.InviteMembersObjective;
 import com.orleansmc.realms.utils.Util;
 import com.orleansmc.realms.configs.texts.Texts;
-import com.orleansmc.realms.managers.RegionManager;
+import com.orleansmc.realms.managers.realm.RegionManager;
 import com.orleansmc.realms.menus.RealmMenu;
 import com.orleansmc.realms.menus.SelectClimateMenu;
 import com.orleansmc.realms.models.messaging.InviteModel;
@@ -397,7 +397,7 @@ public class RealmCommand {
             plugin.realmsManager.messageManager.sendMessage(player.getName(), Texts.ALREADY_HAVE_REALM);
             return;
         }
-        plugin.realmsManager.createRealm(player.getName(), climateType);
+        plugin.realmsManager.createRealm(player, climateType);
     }
 
     private static void handleTeleportToRealm(Player player, RealmModel realm) {

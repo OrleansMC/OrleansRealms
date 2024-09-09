@@ -1,4 +1,4 @@
-package com.orleansmc.realms.managers;
+package com.orleansmc.realms.managers.server;
 
 import com.orleansmc.bukkit.players.models.PlayerAlertModel;
 import com.orleansmc.bukkit.players.models.RecentDeathModel;

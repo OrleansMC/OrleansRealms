@@ -1,12 +1,10 @@
 package com.orleansmc.realms.configs.settings;
 
-import com.orleansmc.bukkit.players.models.PlayerModel;
-import com.orleansmc.realms.managers.LuckPermsManager;
+import com.orleansmc.realms.managers.common.LuckPermsManager;
 import com.orleansmc.realms.models.data.RealmModel;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 public class Settings {
     public static String SERVER_NAME = "default";

@@ -1,4 +1,4 @@
-package com.orleansmc.realms.managers;
+package com.orleansmc.realms.managers.server;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -8,10 +8,6 @@ import com.orleansmc.common.servers.ServerType;
 import com.orleansmc.common.servers.ServersProvider;
 import com.orleansmc.realms.OrleansRealms;
 import com.orleansmc.realms.configs.settings.Settings;
-import net.william278.huskhomes.api.HuskHomesAPI;
-import net.william278.huskhomes.position.Position;
-import net.william278.huskhomes.position.World;
-import net.william278.huskhomes.user.OnlineUser;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

@@ -1,8 +1,9 @@
-package com.orleansmc.realms.managers;
+package com.orleansmc.realms.managers.player;
 
 import com.orleansmc.bukkit.players.PlayersProvider;
 import com.orleansmc.bukkit.players.models.PlayerModel;
 import com.orleansmc.realms.OrleansRealms;
+import com.orleansmc.realms.managers.common.LuckPermsManager;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

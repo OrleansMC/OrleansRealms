@@ -5,7 +5,7 @@ import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
 import com.orleansmc.realms.OrleansRealms;
-import com.orleansmc.realms.managers.QuestManager;
+import com.orleansmc.realms.managers.server.QuestManager;
 import com.orleansmc.realms.utils.Util;
 import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
 import me.pikamug.quests.module.BukkitCustomReward;
