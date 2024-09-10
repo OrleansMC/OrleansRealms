@@ -194,7 +194,10 @@ public class RealmsExpansion extends PlaceholderExpansion {
                 if (groupName.equalsIgnoreCase("default")) {
                     groupName = "player";
                 }
-                final String realmTag = PlaceholderAPI.setPlaceholders(offlinePlayer, "%img_realm_tag_" + groupName.toLowerCase() + "%");
+                final String realmTag = PlaceholderAPI.setPlaceholders(offlinePlayer, "%img_realm_tag_" + groupName.toLowerCase()
+                        .replaceAll("İ", "i").replaceAll("ı", "i").replaceAll("ğ", "g").replaceAll("Ğ", "g")
+                        .replaceAll("ü", "u").replaceAll("Ü", "u").replaceAll("ş", "s").replaceAll("Ş", "s")
+                        + "%");
                 return realmTag + " " + Util.getColorCodeFromPlayerPrefix(realm.owner);
             }
             if (params.equals("nameplate_tag")) {

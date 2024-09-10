@@ -26,9 +26,7 @@ public class RealmsChunkyManager {
             if (progress % 10 != 0) return;
             plugin.getLogger().info("Realm creation progress: " + event.progress());
 
-            PendingRealmModel pendingRealmModel = realmsRedisManager.pendingRealms.values().stream()
-                    .filter(pendingRealmModel1 -> pendingRealmModel1.executed)
-                    .findFirst().orElse(null);
+            PendingRealmModel pendingRealmModel =  getExecutedPendingRealmModel();
 
             if (pendingRealmModel == null) {
                 plugin.getLogger().warning("CHUNKY API GENERATION PROGRESS BUT NO PENDING REALM CREATION");

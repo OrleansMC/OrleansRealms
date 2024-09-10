@@ -110,7 +110,8 @@ public class RealmsRedisManager {
                 return;
             }
             PendingRealmModel pending = pendingRealms.values().stream()
-                    .filter(pendingRealmModel -> !pendingRealmModel.executed)
+                    .filter(pendingRealmModel -> !pendingRealmModel.executed
+                            && (pendingRealmModel.server == null || pendingRealmModel.server.equals(Settings.SERVER_NAME)))
                     .findFirst().orElse(null);
             if (pending == null) {
                 return;

@@ -34,6 +34,10 @@ public class PlayerDataManager {
         return playerModel;
     }
 
+    public PlayerModel fetchPlayerData(String playerName) {
+        return playersProvider.fetchPlayer(playerName);
+    }
+
     public void savePlayerData(PlayerModel playerModel) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             playersProvider.savePlayer(playerModel);

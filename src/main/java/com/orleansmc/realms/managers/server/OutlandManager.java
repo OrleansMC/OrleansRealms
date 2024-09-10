@@ -1,6 +1,7 @@
 package com.orleansmc.realms.managers.server;
 
 import com.orleansmc.bukkit.players.models.PlayerAlertModel;
+import com.orleansmc.bukkit.players.models.PlayerModel;
 import com.orleansmc.bukkit.players.models.RecentDeathModel;
 import com.orleansmc.common.servers.ServerType;
 import com.orleansmc.realms.OrleansRealms;
@@ -34,6 +35,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -176,10 +178,13 @@ public class OutlandManager implements Listener {
             return;
         }
         plugin.playerDataManager.waitPlayerDataThenRun(player, playerModel -> {
-            RecentDeathModel latestDeath = playerModel.recentDeaths.stream().findFirst().orElse(null);
+            RecentDeathModel lastDeath = playerModel.recentDeaths.stream()
+                    .max((o1, o2) -> o1.date.compareTo(o2.date))
+                    .orElse(null);
+
             double multiplier = 0;
-            if (latestDeath != null) {
-                multiplier = latestDeath.backPriceMultiplier + 1;
+            if (lastDeath != null) {
+                multiplier = lastDeath.backPriceMultiplier + 1;
                 if (multiplier > 5) {
                     multiplier = 0;
                 }
@@ -215,8 +220,13 @@ public class OutlandManager implements Listener {
                         player.sendMessage(Util.getExclamation() + "Şu anda bir yere ışınlanıyorsunuz.");
                         return;
                     }
-                    plugin.playerDataManager.waitPlayerDataThenRun(player, playerModel -> {
-                        RecentDeathModel recentDeath = playerModel.recentDeaths.stream().findFirst().orElse(null);
+                    player.sendMessage(Util.getExclamation() + "Ölüm konumunuza dönülüyor... Lütfen bekleyin.");
+                    Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                        PlayerModel playerModel = plugin.playerDataManager.fetchPlayerData(player.getName());
+                        // get latest death location
+                        RecentDeathModel recentDeath = playerModel.recentDeaths.stream()
+                                .max(Comparator.comparing(o -> o.date))
+                                .orElse(null);
                         if (recentDeath == null) {
                             player.sendMessage(Util.getExclamation() + "Ölüm konumunuz bulunamadı.");
                             return;

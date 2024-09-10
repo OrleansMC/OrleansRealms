@@ -47,7 +47,7 @@ public class RealmListener implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         animals.add(EntityType.COW);
         animals.add(EntityType.SHEEP);
-        animals.add(EntityType.PIG);
+        animals.add(EntityType.ARMADILLO);
         animals.add(EntityType.CHICKEN);
         animals.add(EntityType.RABBIT);
         animals.add(EntityType.HORSE);
@@ -98,10 +98,15 @@ public class RealmListener implements Listener {
         if (serverType == ServerType.REALMS) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 RealmModel realm = plugin.realmsManager.getRealmByLocation(player.getLocation());
-                if (realm == null) {
-                    plugin.getLogger().info("Realm not found for location: " + player.getLocation().getX() + ", " + player.getLocation().getZ());
-                    player.sendMessage(Util.getExclamation() + "Lokasyonunuzda bir diyar bulunamadı.");
-                    player.kick(Component.empty());
+                if (realm == null && !player.hasPermission("orleansmc.realms.admin")) {
+                    RealmModel playerRealm = plugin.realmsManager.getRealm(player.getName());
+                    if (playerRealm != null) {
+                        plugin.realmsManager.teleportPlayerToRealm(player, playerRealm);
+                    } else {
+                        plugin.getLogger().info("Realm not found for location: " + player.getLocation().getX() + ", " + player.getLocation().getZ());
+                        player.sendMessage(Util.getExclamation() + "Lokasyonunuzda bir diyar bulunamadı.");
+                        player.kick(Component.empty());
+                    }
                 }
             }, 20L);
         }
@@ -109,6 +114,9 @@ public class RealmListener implements Listener {
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
+        if (event.getPlayer().isOp()) {
+            event.getPlayer().setOp(false);
+        }
         event.quitMessage(null);
     }
 
@@ -385,11 +393,13 @@ public class RealmListener implements Listener {
     }
 
     @EventHandler
-    public void onAnimalBreed(EntityBreedEvent event) {
+    public void onVillagerBreed(EntityBreedEvent event) {
         if (plugin.serversManager.getCurrentServerType() != ServerType.REALMS) return;
         if (!event.getEntity().getWorld().getName().equals(Settings.WORLD_NAME)) return;
 
-        event.setCancelled(true);
+        if (event.getEntity() instanceof Villager) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler

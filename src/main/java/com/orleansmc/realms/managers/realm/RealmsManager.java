@@ -61,29 +61,37 @@ public class RealmsManager {
     public ServerState getSuitableRealmsServer() {
         return plugin.serversManager.getServerStates().values().stream()
                 .filter(serverState -> ServerType.valueOf(serverState.type) == ServerType.REALMS).min((server1, server2) -> {
-                    int server1RealmsCount = (int) realms.values().stream().filter(realm -> realm.server.equals(server1.name)).count();
-                    int server2RealmsCount = (int) realms.values().stream().filter(realm -> realm.server.equals(server2.name)).count();
+                    int server1RealmsCount = (int) (realms.values().stream().filter(realm -> realm.server.equals(server1.name)).count()
+                            + realmsRedisManager.pendingRealms.values().stream().filter(realm -> {
+                        if (realm.server == null) return false;
+                        return realm.server.equals(server1.name);
+                    }).count());
+                    int server2RealmsCount = (int) (realms.values().stream().filter(realm -> realm.server.equals(server2.name)).count()
+                            + realmsRedisManager.pendingRealms.values().stream().filter(realm -> {
+                        if (realm.server == null) return false;
+                        return realm.server.equals(server2.name);
+                    }).count());
                     return Integer.compare(server1RealmsCount, server2RealmsCount);
                 })
                 .orElse(null);
     }
 
     public void showUpAllay(RealmModel realm, int tryIndex) {
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            Player player = Bukkit.getPlayer(realm.owner);
-            if (tryIndex > 80) {
-                plugin.getLogger().warning("Allay is not shown up for " + realm.owner);
-                return;
-            }
-            if (player == null) {
+        Player player = Bukkit.getPlayer(realm.owner);
+        if (tryIndex > 80) {
+            plugin.getLogger().warning("Allay is not shown up for " + realm.owner);
+            return;
+        }
+        if (player == null) {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 showUpAllay(realm, tryIndex + 1);
-                return;
-            }
-            Bukkit.getServer().dispatchCommand(
-                    Bukkit.getConsoleSender(),
-                    "allay-show-up " + player.getName() + " WELCOME_TO_REALM"
-            );
-        }, 20);
+            }, 20 * 3);
+            return;
+        }
+        Bukkit.getServer().dispatchCommand(
+                Bukkit.getConsoleSender(),
+                "allay-show-up " + player.getName() + " WELCOME_TO_REALM"
+        );
     }
 
     public RealmModel getRealmByRegionCoordinates(int regionX, int regionZ) {
@@ -120,6 +128,9 @@ public class RealmsManager {
         });
     }
 
+    public void teleportPlayerToRealm(Player player, RealmModel realm) {
+        plugin.serversManager.teleportPlayer(player, Util.getLocationFromString(realm.spawn), Settings.REALMS_WORLD_NAME, realm.server);
+    }
 
     public void deleteRealm(String playerName) {
         RealmModel realm = realms.get(playerName);
