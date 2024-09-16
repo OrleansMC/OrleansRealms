@@ -133,8 +133,8 @@ public class RealmListener implements Listener {
             player.getWorld().dropItemNaturally(player.getLocation(), item);
         }
         player.getInventory().clear();
-        player.setTotalExperience(event.getNewExp());
-        player.setLevel(event.getNewLevel());
+        //player.setTotalExperience(event.getNewExp());
+        //player.setLevel(event.getNewLevel());
         event.getItemsToKeep().forEach(item -> player.getInventory().addItem(item));
         player.setGameMode(GameMode.SPECTATOR);
         player.getWorld().spawnParticle(
@@ -145,7 +145,7 @@ public class RealmListener implements Listener {
         player.getWorld().playSound(player.getLocation(), "minecraft:entity.player.death", 1, 1);
         player.showTitle(Title.title(plugin.getComponent("<color:#ff0000>Öldün!"), Component.empty(), Title.Times.times(Duration.ofMillis(100), Duration.ofMillis(2000), Duration.ofMillis(100))));
         Bukkit.getScheduler().runTaskLaterAsynchronously(plugin,
-                () -> plugin.serversManager.teleportPlayer(player, Spawn.LOCATION, "spawn", Objects.requireNonNull(plugin.serversManager.getServerStates().values().stream()
+                () -> plugin.serversManager.serversProvider.switchServer(player.getName(), Objects.requireNonNull(plugin.serversManager.getServerStates().values().stream()
                         .filter(s -> ServerType.valueOf(s.type).equals(ServerType.REALMS_SPAWN))
                         .min((s1, s2) -> s2.players.size() - s1.players.size())
                         .orElse(null)).name),
@@ -433,9 +433,19 @@ public class RealmListener implements Listener {
     public void onEntitySpawn(EntitySpawnEvent event) {
         if (plugin.serversManager.getCurrentServerType() != ServerType.REALMS) return;
 
-        RealmModel realm = plugin.realmsManager.getRealmByLocation(event.getLocation());
+        final RealmModel realm = plugin.realmsManager.getRealmByLocation(event.getLocation());
 
         if (realm == null) {
+            event.setCancelled(true);
+            return;
+        }
+
+        final int radius = Settings.getUnlockedRealmRadius(realm);
+        final int[] region = Util.getRegionCoordinatesFromString(realm.region);
+        final Location center = RegionManager.getCenterLocation(region[0], region[1]);
+        final Location entityLocation = event.getLocation();
+
+        if ((Math.abs(center.getX() - entityLocation.getX()) > radius) || (Math.abs(center.getZ() - entityLocation.getZ()) > radius)) {
             event.setCancelled(true);
             return;
         }
@@ -447,7 +457,8 @@ public class RealmListener implements Listener {
 
         if (
                 (event.getEntity().getEntitySpawnReason() != CreatureSpawnEvent.SpawnReason.SPAWNER_EGG) &&
-                        (event.getEntity().getEntitySpawnReason() != CreatureSpawnEvent.SpawnReason.COMMAND)
+                        (event.getEntity().getEntitySpawnReason() != CreatureSpawnEvent.SpawnReason.COMMAND) &&
+                        (event.getEntity().getEntitySpawnReason() != CreatureSpawnEvent.SpawnReason.CURED)
         ) {
             if (event.getEntity() instanceof Monster && !realm.monster_spawn) {
                 event.setCancelled(true);

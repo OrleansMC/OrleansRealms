@@ -1,4 +1,4 @@
-package com.orleansmc.realms.managers.common;
+package com.orleansmc.realms.managers.server;
 
 import com.orleansmc.common.servers.ServerType;
 import com.orleansmc.realms.OrleansRealms;
@@ -24,6 +24,7 @@ public class GameRulesManager {
             realm.setGameRule(GameRule.DISABLE_RAIDS, true);
             realm.setGameRule(GameRule.DO_WARDEN_SPAWNING, false);
             realm.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+            realm.setGameRule(GameRule.RANDOM_TICK_SPEED, 5);
             realm.getWorldBorder().setWarningDistance(0);
             realm.setDifficulty(Difficulty.EASY);
         }
@@ -63,7 +64,7 @@ public class GameRulesManager {
             outland.setGameRule(GameRule.DO_TRADER_SPAWNING, false);
             outland.setGameRule(GameRule.DO_INSOMNIA, false);
             outland.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
-            outland.setDifficulty(Difficulty.NORMAL);
+            outland.setDifficulty(Difficulty.EASY);
         }
     }
 }

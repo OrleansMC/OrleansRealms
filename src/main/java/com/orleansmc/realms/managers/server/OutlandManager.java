@@ -42,6 +42,7 @@ import java.util.List;
 public class OutlandManager implements Listener {
     OrleansRealms plugin;
     List<String> waitingForRandomTeleport = new ArrayList<>();
+    List<String> newTeleported = new ArrayList<>();
 
     public OutlandManager(OrleansRealms plugin) {
         this.plugin = plugin;
@@ -49,7 +50,7 @@ public class OutlandManager implements Listener {
         setupLastDeadLocationCommand();
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         ServerType serverType = plugin.serversManager.getCurrentServerType();
         Player player = event.getPlayer();
@@ -63,41 +64,60 @@ public class OutlandManager implements Listener {
                 }, 20 * 5);
                 return;
             }
-            Location spawn = event.getPlayer().getWorld().getSpawnLocation();
+            Location spawn = new Location(Bukkit.getWorld(Settings.WORLD_NAME), 0, 0, 0);
             spawn.setY(254);
             if (!spawn.getBlock().getType().equals(Material.BEDROCK)) {
                 spawn.getBlock().setType(Material.BEDROCK);
             }
             spawn.setY(255);
-            player.teleport(spawn);
-            PotionEffect effect = PotionEffectType.BLINDNESS.createEffect(20 * 10, 10);
-            effect.withIcon(false);
-            effect.withParticles(false);
-            player.addPotionEffect(effect);
-            player.showTitle(
-                    Title.title(
-                            plugin.getComponent(Util.getExclamation() + "<white>Işınlanıyorsunuz..."),
-                            Component.empty(),
-                            Title.Times.times(Duration.ofMillis(200), Duration.ofMillis(30000), Duration.ofMillis(200))
-                    )
-            );
-            waitingForRandomTeleport.add(player.getName());
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                if (!waitingForRandomTeleport.contains(player.getName())) {
-                    return;
-                }
-                player.sendMessage(Util.getExclamation() + "Sizin için uygun bir yer aranıyor...");
-                Bukkit.getServer().dispatchCommand(
-                        Bukkit.getConsoleSender(),
-                        "huskhomes:rtp " + player.getName() + " outland"
+                player.teleport(spawn);
+                PotionEffect effect = PotionEffectType.BLINDNESS.createEffect(20 * 10, 10);
+                effect.withIcon(false);
+                effect.withParticles(false);
+                player.addPotionEffect(effect);
+                player.showTitle(
+                        Title.title(
+                                plugin.getComponent(Util.getExclamation() + "<white>Işınlanıyorsunuz..."),
+                                Component.empty(),
+                                Title.Times.times(Duration.ofMillis(200), Duration.ofMillis(30000), Duration.ofMillis(200))
+                        )
                 );
-            }, 20 * 5);
+                waitingForRandomTeleport.add(player.getName());
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    if (!waitingForRandomTeleport.contains(player.getName())) {
+                        return;
+                    }
+                    player.sendMessage(Util.getExclamation() + "Sizin için uygun bir yer aranıyor...");
+                    Bukkit.getServer().dispatchCommand(
+                            Bukkit.getConsoleSender(),
+                            "huskhomes:rtp " + player.getName() + " outland"
+                    );
+                }, 20 * 5);
+            }, 1);
         }
     }
 
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event) {
+        if (!plugin.serversManager.getCurrentServerType().equals(ServerType.REALMS_OUTLAND)) return;
         Player player = event.getPlayer();
+        newTeleported.add(player.getName());
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            Location playerHeadLocation = player.getLocation().clone().add(0, 1, 0);
+            if (playerHeadLocation.getBlock().getType().isSolid() &&
+                    !playerHeadLocation.getBlock().getType().equals(Material.BEDROCK) &&
+                    !playerHeadLocation.getBlock().getType().equals(Material.CHEST)
+            ) {
+                playerHeadLocation.getBlock().setType(Material.AIR);
+                playerHeadLocation.clone().add(0, -1, 0).getBlock().setType(Material.AIR);
+            }
+            Location playerFeetLocation = player.getLocation().clone().add(0, -1, 0);
+            if (playerFeetLocation.getBlock().getType().isAir()) {
+                playerFeetLocation.getBlock().setType(Material.GRASS_BLOCK);
+            }
+        }, 2);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> newTeleported.remove(player.getName()), 20 * 10);
         if (waitingForRandomTeleport.contains(player.getName())) {
             waitingForRandomTeleport.remove(player.getName());
             player.clearTitle();
@@ -143,6 +163,9 @@ public class OutlandManager implements Listener {
     public void onEntityTargetToPlayerEvent(EntityTargetEvent event) {
         if (plugin.serversManager.getCurrentServerType() != ServerType.REALMS_OUTLAND) return;
         if (!(event.getTarget() instanceof Player player)) return;
+        if (newTeleported.contains(player.getName())) {
+            event.setCancelled(true);
+        }
 
         if (waitingForRandomTeleport.contains(player.getName())) {
             event.setCancelled(true);
@@ -179,7 +202,7 @@ public class OutlandManager implements Listener {
         }
         plugin.playerDataManager.waitPlayerDataThenRun(player, playerModel -> {
             RecentDeathModel lastDeath = playerModel.recentDeaths.stream()
-                    .max((o1, o2) -> o1.date.compareTo(o2.date))
+                    .max(Comparator.comparing(o -> o.date))
                     .orElse(null);
 
             double multiplier = 0;
@@ -191,7 +214,7 @@ public class OutlandManager implements Listener {
             }
 
             RecentDeathModel recentDeathModel = new RecentDeathModel(
-                    Util.getStringFromLocation(player.getLocation()),
+                    Util.getStringFromLocation(player.getLocation().clone().add(0, 0.5, 0)),
                     Settings.SERVER_NAME,
                     new Date(),
                     multiplier
@@ -238,11 +261,11 @@ public class OutlandManager implements Listener {
                             player.sendMessage(Util.getExclamation() + "Ölüm konumunuza dönmek için mücevheriniz yetersiz.");
                             return;
                         }
-                        plugin.serversManager.teleportPlayer(player, Util.getLocationFromString(recentDeath.location),
-                                Util.getWorldNameFromLocationString(recentDeath.location), recentDeath.server);
                         if (price > 0) {
                             currency.withdrawPlayer(player, price);
                         }
+                        plugin.serversManager.teleportPlayer(player, Util.getLocationFromString(recentDeath.location),
+                                Util.getWorldNameFromLocationString(recentDeath.location), recentDeath.server, true);
                     });
                 })
                 .registerAndBind(plugin, "last-dead-location");

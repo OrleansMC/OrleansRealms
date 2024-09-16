@@ -25,11 +25,9 @@ public class MessageManager {
 
         channelAgent.addListener((agent, message) -> {
             if (message.target.equals("all")) {
-                Bukkit.getOnlinePlayers().forEach(player -> {
-                    player.sendMessage(
-                            plugin.getComponent(message.textModel.get(player.locale()))
-                    );
-                });
+                Bukkit.getOnlinePlayers().forEach(player -> player.sendMessage(
+                        plugin.getComponent(message.textModel.tr)
+                ));
             } else {
                 Player player = Bukkit.getPlayer(message.target);
                 if (player != null) {

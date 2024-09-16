@@ -1,6 +1,9 @@
 package com.orleansmc.realms.listeners;
 
+import com.orleansmc.common.servers.ServerType;
 import com.orleansmc.realms.OrleansRealms;
+import com.orleansmc.realms.configs.settings.Settings;
+import com.orleansmc.realms.configs.spawn.Spawn;
 import com.orleansmc.realms.utils.Util;
 import dev.lone.itemsadder.api.Events.CustomBlockPlaceEvent;
 import org.bukkit.*;
@@ -14,6 +17,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -114,6 +118,24 @@ public class MainListener implements Listener {
                 event.getWhoClicked().getInventory().addItem(firstItem);
                 event.setCancelled(true);
                 event.getWhoClicked().sendMessage("§cBu eşya ile takas yapamazsınız.");
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        Location spawn = Spawn.LOCATION;
+        if (spawn == null) {
+            return;
+        }
+        ServerType serverType = plugin.serversManager.getCurrentServerType();
+        if (serverType == ServerType.REALMS_SPAWN) {
+            Location to = event.getTo();
+            if (
+                    Math.abs(to.getBlockX() - spawn.getBlockX()) > 280 ||
+                            Math.abs(to.getBlockZ() - spawn.getBlockZ()) > 280 ||
+                                    Math.abs(to.getBlockY() - spawn.getBlockY()) > 50) {
+                event.getPlayer().teleport(spawn);
             }
         }
     }

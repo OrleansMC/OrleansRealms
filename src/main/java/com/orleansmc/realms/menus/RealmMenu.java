@@ -125,9 +125,6 @@ public class RealmMenu extends SuperMenu {
             realmsNavigator.clear();
             List<RealmModel> realmModels = new ArrayList<>();
             RealmModel playerRealm = plugin.realmsManager.getRealm(player.getName());
-            if (playerRealm != null && page.get() == 0) {
-                realmModels.add(playerRealm);
-            }
 
             int realmLimit = 21;
             int finalPage = page.get();
@@ -141,7 +138,11 @@ public class RealmMenu extends SuperMenu {
                 return realm.allow_visitors && realm.banned_players.stream().noneMatch(bannedPlayer -> bannedPlayer.equalsIgnoreCase(player.getName()));
             }).sorted(Comparator.comparingDouble(realm -> realm.level)).forEach(realmModels::add);
 
-            realmModels = realmModels.subList(page.get() * realmLimit, Math.min(realmModels.size(), (page.get() + 1) * realmLimit));
+            if (playerRealm != null && page.get() == 0) {
+                realmModels.add(playerRealm);
+            }
+
+            realmModels = realmModels.reversed().subList(page.get() * realmLimit, Math.min(realmModels.size(), (page.get() + 1) * realmLimit));
 
             int totalPages = (int) Math.ceil((double) realmModels.size() / realmLimit);
             if (page.get() < 0) {

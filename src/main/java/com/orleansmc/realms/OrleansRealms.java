@@ -5,7 +5,7 @@ import com.orleansmc.realms.commands.CommandLoader;
 import com.orleansmc.realms.commands.players.RealmCommand;
 import com.orleansmc.realms.configs.ConfigLoader;
 import com.orleansmc.realms.listeners.ListenerLoader;
-import com.orleansmc.realms.managers.common.GameRulesManager;
+import com.orleansmc.realms.managers.server.GameRulesManager;
 import com.orleansmc.realms.managers.common.LuckPermsManager;
 import com.orleansmc.realms.managers.player.PlayerDataManager;
 import com.orleansmc.realms.managers.realm.RealmsManager;

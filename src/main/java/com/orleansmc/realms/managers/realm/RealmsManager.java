@@ -90,6 +90,10 @@ public class RealmsManager {
         }
         Bukkit.getServer().dispatchCommand(
                 Bukkit.getConsoleSender(),
+                "kill @e[type=!player,x=" + player.getLocation().getBlockX() + ",y=77,z=" + player.getLocation().getBlockZ() + ",distance=..512]"
+        );
+        Bukkit.getServer().dispatchCommand(
+                Bukkit.getConsoleSender(),
                 "allay-show-up " + player.getName() + " WELCOME_TO_REALM"
         );
     }

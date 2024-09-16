@@ -93,7 +93,7 @@ public class RealmMembersMenu extends SuperMenu {
                         player.showTitle(
                                 Title.title(
                                         Component.text("§a§lÜye Ekle!"),
-                                        Component.text("§7/diyar üye ekle <oyuncu>"),
+                                        Component.text("§7/diyar üye ekle <oyuncu> <rütbesi>"),
                                         Title.Times.times(Duration.ofMillis(100), Duration.ofSeconds(5), Duration.ofMillis(100))
                                 )
                         );

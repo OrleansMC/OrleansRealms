@@ -43,10 +43,13 @@ public class ServersManager {
     }
 
     public void teleportPlayer(Player player, Location location, String worldName, String serverName) {
+        teleportPlayer(player, location, worldName, serverName, false);
+    }
+    public void teleportPlayer(Player player, Location location, String worldName, String serverName, boolean force) {
         TeleportProvider teleportProvider = Bukkit.getServer().getServicesManager().load(TeleportProvider.class);
         if (teleportProvider == null) {
             throw new IllegalStateException("TeleportProvider not found");
         }
-        teleportProvider.teleportPlayer(player, location, worldName, serverName);
+        teleportProvider.teleportPlayer(player, location, worldName, serverName, force);
     }
 }

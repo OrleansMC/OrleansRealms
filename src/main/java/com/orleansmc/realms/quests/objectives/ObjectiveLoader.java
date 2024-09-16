@@ -6,5 +6,6 @@ public class ObjectiveLoader {
         ConvertGemObjective.load();
         IncreaseRealmSizeObjective.load();
         InviteMembersObjective.load();
+        IncreaseRealmLevelObjective.load();
     }
 }

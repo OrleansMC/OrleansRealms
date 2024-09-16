@@ -103,23 +103,29 @@ public class RealmsRedisManager {
                 return;
             }
             ServerState suitableServer = realmsManager.getSuitableRealmsServer();
+            PendingRealmModel pending = pendingRealms.values().stream()
+                    .filter(pendingRealmModel -> !pendingRealmModel.executed
+                            && (pendingRealmModel.server != null && pendingRealmModel.server.equals(Settings.SERVER_NAME)))
+                    .findFirst().orElse(null);
             if (suitableServer == null) {
                 return;
             }
-            if (!suitableServer.name.equals(Settings.SERVER_NAME)) {
+            if (!suitableServer.name.equals(Settings.SERVER_NAME) && pending == null) {
                 return;
             }
-            PendingRealmModel pending = pendingRealms.values().stream()
-                    .filter(pendingRealmModel -> !pendingRealmModel.executed
-                            && (pendingRealmModel.server == null || pendingRealmModel.server.equals(Settings.SERVER_NAME)))
-                    .findFirst().orElse(null);
+            if (pending == null) {
+                pending = pendingRealms.values().stream()
+                        .filter(pendingRealmModel -> !pendingRealmModel.executed
+                                && (pendingRealmModel.server == null || pendingRealmModel.server.equals(Settings.SERVER_NAME)))
+                        .findFirst().orElse(null);
+            }
             if (pending == null) {
                 return;
             }
             creationLock.set(true);
-            this.generateRealm(suitableServer.name, pending);
+            this.generateRealm(Settings.SERVER_NAME, pending);
             pending.executed = true;
-            pending.server = suitableServer.name;
+            pending.server = Settings.SERVER_NAME;
             this.pendingRealmsChannelAgent.getChannel().sendMessage(pending);
         }, 0, 20L * 2);
     }
@@ -142,9 +148,9 @@ public class RealmsRedisManager {
             return;
         }
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            this.pendingRealmsChannelAgent.getChannel().sendMessage(
-                    new PendingRealmModel(playerName, realm.climate, PendingRealmModel.PendingType.RADIUS_CHANGE, radius)
-            );
+            PendingRealmModel pendingRealmModel = new PendingRealmModel(playerName, realm.climate, PendingRealmModel.PendingType.RADIUS_CHANGE, radius);
+            pendingRealmModel.server = realm.server;
+            this.pendingRealmsChannelAgent.getChannel().sendMessage(pendingRealmModel);
         });
     }
 
@@ -169,6 +175,10 @@ public class RealmsRedisManager {
     public void handleCreatedRealm(RealmStateModel message) {
         RealmModel realm = message.realm;
         CreateRealmObjective.instance.onCreatedRealm(realm);
+
+        List<String> serverRemovedRegions = RegionManager.removedRegions.computeIfAbsent(Settings.SERVER_NAME, k -> new ArrayList<>());
+        serverRemovedRegions.add(realm.region);
+        RegionManager.removedRegions.put(Settings.SERVER_NAME, serverRemovedRegions);
 
         Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
             realmsManager.realms.put(realm.owner, realm);

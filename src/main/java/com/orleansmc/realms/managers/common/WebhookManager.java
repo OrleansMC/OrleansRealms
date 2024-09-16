@@ -58,14 +58,15 @@ public class WebhookManager {
     }
 
     public static void sendPlayerDeathWebhook(OfflinePlayer player, Component cause, Location location) {
+        String playerName = player.getName();
         DiscordWebhook webhook = new DiscordWebhook(Settings.DEATH_WEBHOOK_URL);
-        webhook.setAvatarUrl("https://mc-heads.net/avatar/" + player.getName() + "/64.png");
-        webhook.setUsername(player.getName());
+        webhook.setAvatarUrl("https://mc-heads.net/avatar/" + playerName + "/64.png");
+        webhook.setUsername(playerName);
         webhook.addEmbed(
                 new DiscordWebhook.EmbedObject()
                         .setTitle("Oyuncu Öldü")
-                        .setDescription(player.getName() + " isimli oyuncu öldü.")
-                        .addField("Sebep", Util.getString(cause), false)
+                        .setDescription(playerName + " isimli oyuncu öldü.")
+                        .addField("Sebep", "`" + Util.getString(cause) + "`", false)
                         .addField("Konum", Util.getStringFromLocation(location), true)
                         .addField("Sunucu", Settings.SERVER_NAME, true)
                         .addField("Tarih", "<t:" + (System.currentTimeMillis() / 1000) + ":F>", false)

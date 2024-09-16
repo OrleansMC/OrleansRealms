@@ -85,16 +85,20 @@ public class QuestManager implements Listener {
     public void onPlayerJoin(org.bukkit.event.player.PlayerJoinEvent event) {
         Bukkit.getScheduler().runTaskLater((JavaPlugin) questsPlugin, () -> {
             applyRequiredQuest(event.getPlayer());
-        }, 20L * 2);
+        }, 20L * 5);
     }
 
     @EventHandler
     public void onQuestComplete(BukkitQuesterPostCompleteQuestEvent event) {
         Bukkit.getScheduler().runTaskLater((JavaPlugin) questsPlugin, () -> {
+            Player player = Bukkit.getPlayer(event.getQuester().getUUID());
+            if (player == null) {
+                return;
+            }
             Quester quester = event.getQuester();
             if (quester.getPlayer() != null) {
                 applyRequiredQuest(quester.getPlayer());
             }
-        }, 20L * 10);
+        }, 20L * 5);
     }
 }

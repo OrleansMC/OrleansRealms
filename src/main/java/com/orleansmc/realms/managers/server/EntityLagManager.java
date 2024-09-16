@@ -183,7 +183,6 @@ public class EntityLagManager implements Listener {
 
     public void removeEntities() {
         List<String> entityTypes = Arrays.asList(
-                "item",
                 "zombie",
                 "creeper",
                 "skeleton",
@@ -200,5 +199,9 @@ public class EntityLagManager implements Listener {
                     "minecraft:kill @e[type=" + entityType + "]"
             );
         }
+        Bukkit.getServer().dispatchCommand(
+                Bukkit.getConsoleSender(),
+                "mm mobs killall"
+        );
     }
 }
