@@ -15,6 +15,7 @@ depend:
   - Chunky
   - Quests
   - SkinsRestorer
+  - Citizens
 permissions:
   "orleansmc.realms.staff":
     description: "Allows access to all staff commands."

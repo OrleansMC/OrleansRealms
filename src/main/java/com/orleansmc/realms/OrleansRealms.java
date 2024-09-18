@@ -39,6 +39,7 @@ public final class OrleansRealms extends ExtendedJavaPlugin {
     public ChunkyAPI chunkyAPI;
     public WorldBorderApi worldBorderApi;
     public RedisEconomyAPI redisEconomyAPI;
+    public LeaderboardManager leaderboardManager;
 
     @Override
     protected void enable() {
@@ -80,6 +81,7 @@ public final class OrleansRealms extends ExtendedJavaPlugin {
         this.entityLagManager = new EntityLagManager(this);
         this.questManager = new QuestManager(this);
         this.outlandManager = new OutlandManager(this);
+        this.leaderboardManager = new LeaderboardManager(this);
 
         CommandLoader.load(this);
         ListenerLoader.load(this);

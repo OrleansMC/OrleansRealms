@@ -191,4 +191,13 @@ public class Util {
         }
         return location;
     }
+
+    public static Component getComponent(String text) {
+        final MiniMessage mm = MiniMessage.miniMessage();
+        return mm.deserialize(text);
+    }
+
+    public static String getStringFromMiniMessageString(String text) {
+        return "§r" + LegacyComponentSerializer.legacySection().serialize(getComponent(text));
+    }
 }
