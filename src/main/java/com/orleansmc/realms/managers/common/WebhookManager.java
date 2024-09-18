@@ -9,8 +9,12 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.inventory.Inventory;
 
 import java.awt.*;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class WebhookManager {
     public static WebhookProvider webhookProvider = Bukkit.getServicesManager().load(WebhookProvider.class);
@@ -57,18 +61,28 @@ public class WebhookManager {
         webhookProvider.sendWebhook(webhook);
     }
 
-    public static void sendPlayerDeathWebhook(OfflinePlayer player, Component cause, Location location) {
+    public static void sendPlayerDeathWebhook(OfflinePlayer player, String cause, Location location, Inventory inventory) {
         String playerName = player.getName();
         DiscordWebhook webhook = new DiscordWebhook(Settings.DEATH_WEBHOOK_URL);
         webhook.setAvatarUrl("https://mc-heads.net/avatar/" + playerName + "/64.png");
         webhook.setUsername(playerName);
+        StringBuilder sb = new StringBuilder();
+        sb.append(playerName).append(" isimli oyuncu öldü.");
+        if (inventory != null) {
+            for (int i = 0; i < inventory.getContents().length; i++) {
+                if (inventory.getContents()[i] != null) {
+                    sb.append("- ").append(Objects.requireNonNull(inventory.getContents()[i]).getAmount()).append("x ").append(inventory.getContents()[i].getItemMeta().getDisplayName().isEmpty() ? inventory.getContents()[i].getType().name() : inventory.getContents()[i].getItemMeta().getDisplayName());
+                }
+            }
+        }
+        System.out.println(sb.toString());
         webhook.addEmbed(
                 new DiscordWebhook.EmbedObject()
                         .setTitle("Oyuncu Öldü")
-                        .setDescription(playerName + " isimli oyuncu öldü.")
-                        .addField("Sebep", "`" + Util.getString(cause) + "`", false)
-                        .addField("Konum", Util.getStringFromLocation(location), true)
-                        .addField("Sunucu", Settings.SERVER_NAME, true)
+                        .setDescription(sb.substring(0, Math.min(sb.toString().length(), 5000)).replace("\n", " "))
+                        .addField("Sebep", cause.isEmpty() ? "Bilinmiyor" : cause, false)
+                        .addField("Konum", Util.getStringFromLocation(location), false)
+                        .addField("Sunucu", Settings.SERVER_NAME, false)
                         .addField("Tarih", "<t:" + (System.currentTimeMillis() / 1000) + ":F>", false)
                         .setColor(Color.RED)
         );

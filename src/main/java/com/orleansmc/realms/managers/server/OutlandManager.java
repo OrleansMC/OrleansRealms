@@ -7,6 +7,7 @@ import com.orleansmc.common.servers.ServerType;
 import com.orleansmc.realms.OrleansRealms;
 import com.orleansmc.realms.configs.settings.Settings;
 import com.orleansmc.realms.configs.spawn.Spawn;
+import com.orleansmc.realms.managers.common.WebhookManager;
 import com.orleansmc.realms.utils.Util;
 import dev.lone.itemsadder.api.CustomStack;
 import dev.unnm3d.rediseconomy.currency.Currency;
@@ -230,6 +231,10 @@ public class OutlandManager implements Listener {
 
             player.sendMessage(
                     plugin.getComponent(message)
+            );
+
+            WebhookManager.sendPlayerDeathWebhook(
+                    player, event.getDeathMessage(), player.getLocation(), event.getPlayer().getInventory()
             );
         });
     }

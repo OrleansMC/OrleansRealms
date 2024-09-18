@@ -133,8 +133,9 @@ public class RealmListener implements Listener {
             player.getWorld().dropItemNaturally(player.getLocation(), item);
         }
         player.getInventory().clear();
-        //player.setTotalExperience(event.getNewExp());
-        //player.setLevel(event.getNewLevel());
+        player.setLevel(
+                player.getLevel() - player.getLevel() / 2
+        );
         event.getItemsToKeep().forEach(item -> player.getInventory().addItem(item));
         player.setGameMode(GameMode.SPECTATOR);
         player.getWorld().spawnParticle(
@@ -150,7 +151,6 @@ public class RealmListener implements Listener {
                         .min((s1, s2) -> s2.players.size() - s1.players.size())
                         .orElse(null)).name),
                 20L * 2);
-        WebhookManager.sendPlayerDeathWebhook(player, event.deathMessage(), event.getPlayer().getLocation());
     }
 
     @EventHandler
@@ -470,6 +470,12 @@ public class RealmListener implements Listener {
         } else if (animals.contains(event.getEntity().getType())) {
             plugin.getLogger().info("Entity spawned: " + event.getEntity().getEntitySpawnReason());
             plugin.getLogger().info("Location: " + event.getLocation().getX() + ", " + event.getLocation().getZ());
+        }
+
+        if (event.getEntity() instanceof ZombieVillager) {
+            if (Math.random() < 0.5) {
+                event.setCancelled(true);
+            }
         }
     }
 
