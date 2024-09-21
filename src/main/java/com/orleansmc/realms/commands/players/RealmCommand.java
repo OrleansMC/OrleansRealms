@@ -237,15 +237,16 @@ public class RealmCommand {
 
                                 RealmModel realm = plugin.realmsManager.getRealm(realmOwner);
                                 if (realm == null) {
-
                                     Bukkit.getScheduler().runTask(plugin, () ->
                                             new SelectClimateMenu(player, plugin, null).open());
                                     return;
                                 }
 
                                 if (!realm.allow_visitors && realm.members.stream().noneMatch(m -> m.name.equals(player.getName()))) {
-                                    plugin.realmsManager.messageManager.sendMessage(player.getName(), Texts.THIS_REALM_NOT_RECEIVING_VISITORS);
-                                    return;
+                                    if (!player.hasPermission("orleansmc.realms.staff")) {
+                                        plugin.realmsManager.messageManager.sendMessage(player.getName(), Texts.THIS_REALM_NOT_RECEIVING_VISITORS);
+                                        return;
+                                    }
                                 }
 
                                 if (realm.banned_players.contains(player.getName())) {
