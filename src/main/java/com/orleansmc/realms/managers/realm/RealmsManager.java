@@ -8,6 +8,7 @@ import com.orleansmc.realms.enums.RealmClimate;
 import com.orleansmc.realms.enums.RealmState;
 import com.orleansmc.realms.managers.common.DatabaseManager;
 import com.orleansmc.realms.managers.common.MessageManager;
+import com.orleansmc.realms.models.data.DeletedRealmModel;
 import com.orleansmc.realms.models.data.RealmMemberModel;
 import com.orleansmc.realms.models.data.RealmModel;
 import com.orleansmc.realms.models.messaging.RealmStateModel;
@@ -41,6 +42,9 @@ public class RealmsManager {
                     serverRemovedRegions.add(realm.region);
                 }
                 realms.put(realm.owner, realm);
+            }
+            for (DeletedRealmModel deletedRealm : databaseManager.getDeletedRealms()) {
+                serverRemovedRegions.add(deletedRealm.region);
             }
             RegionManager.removedRegions.put(Settings.SERVER_NAME, serverRemovedRegions);
         });

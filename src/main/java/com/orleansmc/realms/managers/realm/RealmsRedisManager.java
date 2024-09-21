@@ -9,6 +9,7 @@ import com.orleansmc.realms.enums.RealmClimate;
 import com.orleansmc.realms.enums.RealmState;
 import com.orleansmc.realms.enums.RealmTime;
 import com.orleansmc.realms.managers.common.WebhookManager;
+import com.orleansmc.realms.models.data.DeletedRealmModel;
 import com.orleansmc.realms.models.data.RealmModel;
 import com.orleansmc.realms.models.messaging.RealmStateModel;
 import com.orleansmc.realms.models.temporary.PendingRealmModel;
@@ -212,6 +213,15 @@ public class RealmsRedisManager {
 
                 RegionManager.unloadAndDeleteRegion(center.getWorld(), Integer.parseInt(realm.region.split(",")[0]), Integer.parseInt(realm.region.split(",")[1]), true);
                 realmsManager.databaseManager.deleteRealm(realm.owner);
+                realmsManager.databaseManager.saveDeletedRealm(
+                        new DeletedRealmModel(
+                                realm.owner,
+                                realm.region,
+                                realm.server,
+                                realm.climate,
+                                realm.spawn
+                        )
+                );
                 WebhookManager.sendRealmDeleteWebhook(realm);
                 realmStateChannelAgent.getChannel().sendMessage(
                         new RealmStateModel(realm, RealmState.DELETED)

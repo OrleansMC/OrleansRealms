@@ -1,6 +1,7 @@
 package com.orleansmc.realms.managers.common;
 
 import com.orleansmc.realms.managers.realm.RealmsManager;
+import com.orleansmc.realms.models.data.DeletedRealmModel;
 import com.orleansmc.realms.models.data.RealmModel;
 import me.lucko.helper.mongo.MongoProvider;
 import me.lucko.helper.mongo.external.bson.Document;
@@ -50,6 +51,19 @@ public class DatabaseManager {
             realms.add(RealmModel.fromDocument(document));
         }
         return realms;
+    }
+
+    public List<DeletedRealmModel> getDeletedRealms() {
+        List<DeletedRealmModel> realms = new ArrayList<>();
+        MongoIterable<Document> iterable = minecraftDatabase.getCollection("deleted_realms").find();
+        for (Document document : iterable) {
+            realms.add(DeletedRealmModel.fromDocument(document));
+        }
+        return realms;
+    }
+
+    public void saveDeletedRealm(DeletedRealmModel realm) {
+        minecraftDatabase.getCollection("deleted_realms").insertOne(realm.toDocument());
     }
 
     public void saveRealm(RealmModel realm) {
