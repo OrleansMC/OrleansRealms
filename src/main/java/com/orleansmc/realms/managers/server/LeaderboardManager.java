@@ -132,7 +132,9 @@ public class LeaderboardManager {
             if (npc.getName().startsWith("quest_")) {
                 int index = Integer.parseInt(npc.getName().split("_")[1]
                         .replace("th", "")) - 1;
-                String playerName = questerAmountsCompleted.keySet().stream().skip(index).findFirst().orElse(null);
+                String playerName = questerAmountsCompleted.keySet().stream().sorted(
+                        (p1, p2) -> Integer.compare(questerAmountsCompleted.get(p2), questerAmountsCompleted.get(p1))
+                ).toList().get(index);
                 int completedQuests = questerAmountsCompleted.get(playerName) / 10;
 
                 if (npc.isSpawned() && npc.getEntity() instanceof SkinnableEntity) {
