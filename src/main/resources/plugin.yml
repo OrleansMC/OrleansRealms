@@ -5,6 +5,7 @@ api-version: '1.20'
 softdepend:
   - OrleansInteractions
   - OrleansShops
+  - Citizens
 depend:
   - OrleansMC
   - HuskHomes
@@ -15,7 +16,6 @@ depend:
   - Chunky
   - Quests
   - SkinsRestorer
-  - Citizens
 permissions:
   "orleansmc.realms.staff":
     description: "Allows access to all staff commands."

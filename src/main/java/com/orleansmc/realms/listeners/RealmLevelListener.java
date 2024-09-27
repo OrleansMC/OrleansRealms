@@ -37,7 +37,7 @@ public class RealmLevelListener implements Listener {
             for (Map.Entry<String, Double> entry : entries.toList()) {
                 RealmModel realm = plugin.realmsManager.getRealm(entry.getKey());
                 if (realm == null) continue;
-                final int oldLevel = (int) realm.level;
+                final double oldLevel = realm.level;
                 realm.level = entry.getValue();
                 for (RealmMemberModel member : realm.members) {
                     Player player = Bukkit.getPlayer(member.name);
@@ -45,11 +45,13 @@ public class RealmLevelListener implements Listener {
                         List<RealmModel> realms = plugin.realmsManager.realms.values().stream()
                                 .filter(r -> r.members.stream().anyMatch(m -> m.name.equals(player.getName())))
                                 .toList();
-                        int maxLevel = (int) realms.stream().min((r1, r2) -> Double.compare(r2.level, r1.level)).get().level;
-                        if (maxLevel < realm.level) {
-                            IncreaseRealmLevelObjective.instance.onRealmLevelChange(
-                                    player, ((int) realm.level)
-                            );
+                        double maxLevel = realms.stream().min((r1, r2) -> Double.compare(r2.level, r1.level)).get().level;
+                        if (maxLevel <= realm.level) {
+                            if (Math.floor(oldLevel) != Math.floor(realm.level)) {
+                                IncreaseRealmLevelObjective.instance.onRealmLevelChange(
+                                        player, (int) (Math.floor(oldLevel) - Math.floor(realm.level))
+                                );
+                            }
                         }
                     }
                 }

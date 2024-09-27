@@ -20,7 +20,7 @@ public class IncreaseRealmLevelObjective extends BukkitCustomObjective {
         setItem("DIAMOND", (short) 0);
         setShowCount(true);
         setCountPrompt("Diyar seviyesini girin:");
-        setDisplay("Diyar Seviyeni Yükselt %count%");
+        setDisplay("Diyar Seviyeni Artır %count%");
         instance = this;
     }
 

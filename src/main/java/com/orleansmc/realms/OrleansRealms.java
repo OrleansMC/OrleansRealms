@@ -1,9 +1,11 @@
 package com.orleansmc.realms;
 
 import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
+import com.orleansmc.common.servers.ServerType;
 import com.orleansmc.realms.commands.CommandLoader;
 import com.orleansmc.realms.commands.players.RealmCommand;
 import com.orleansmc.realms.configs.ConfigLoader;
+import com.orleansmc.realms.configs.settings.Settings;
 import com.orleansmc.realms.listeners.ListenerLoader;
 import com.orleansmc.realms.managers.server.GameRulesManager;
 import com.orleansmc.realms.managers.common.LuckPermsManager;
@@ -81,7 +83,10 @@ public final class OrleansRealms extends ExtendedJavaPlugin {
         this.entityLagManager = new EntityLagManager(this);
         this.questManager = new QuestManager(this);
         this.outlandManager = new OutlandManager(this);
-        this.leaderboardManager = new LeaderboardManager(this);
+
+        if (this.serversManager.getCurrentServerType() == ServerType.REALMS_SPAWN) {
+            this.leaderboardManager = new LeaderboardManager(this);
+        }
 
         CommandLoader.load(this);
         ListenerLoader.load(this);

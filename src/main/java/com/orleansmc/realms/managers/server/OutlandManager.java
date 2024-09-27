@@ -113,7 +113,7 @@ public class OutlandManager implements Listener {
                 playerHeadLocation.getBlock().setType(Material.AIR);
                 playerHeadLocation.clone().add(0, -1, 0).getBlock().setType(Material.AIR);
             }
-            Location playerFeetLocation = player.getLocation().clone().add(0, -1, 0);
+            Location playerFeetLocation = player.getLocation().clone().add(0, -2, 0);
             if (playerFeetLocation.getBlock().getType().isAir()) {
                 playerFeetLocation.getBlock().setType(Material.GRASS_BLOCK);
             }

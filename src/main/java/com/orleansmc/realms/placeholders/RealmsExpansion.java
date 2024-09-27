@@ -85,6 +85,21 @@ public class RealmsExpansion extends PlaceholderExpansion {
                 }
                 return vaultPrefix;
             }
+            case "is_current_realm_member" -> {
+                Player onlinePlayer = player.getPlayer();
+                if (onlinePlayer == null) {
+                    return "";
+                }
+                if (plugin.serversManager.getCurrentServerType() != ServerType.REALMS) {
+                    return "";
+                }
+                final RealmModel realm = plugin.realmsManager.getRealmByLocation(onlinePlayer.getLocation());
+                if (realm == null) {
+                    return "";
+                }
+                final RealmMemberModel member = plugin.realmsManager.getRealmMember(realm.owner, player.getName());
+                return member != null ? "true" : "false";
+            }
             case "pretty_gem" -> {
                 Player onlinePlayer = player.getPlayer();
                 if (onlinePlayer == null) {

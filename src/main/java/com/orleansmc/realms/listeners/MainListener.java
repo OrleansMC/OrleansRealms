@@ -17,6 +17,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerAchievementAwardedEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.Inventory;
@@ -103,6 +104,11 @@ public class MainListener implements Listener {
     }
 
     @EventHandler
+    public void onAchievement(PlayerAchievementAwardedEvent event) {
+        event.setCancelled(true);
+    }
+
+    @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Inventory clickedInventory = event.getClickedInventory();
         if (clickedInventory != null && clickedInventory.getType().equals(InventoryType.MERCHANT)) {
@@ -134,7 +140,7 @@ public class MainListener implements Listener {
             if (
                     Math.abs(to.getBlockX() - spawn.getBlockX()) > 280 ||
                             Math.abs(to.getBlockZ() - spawn.getBlockZ()) > 280 ||
-                                    Math.abs(to.getBlockY() - spawn.getBlockY()) > 50) {
+                            Math.abs(to.getBlockY() - spawn.getBlockY()) > 50) {
                 event.getPlayer().teleport(spawn);
             }
         }
