@@ -44,12 +44,11 @@ assemble.dependsOn(shadowJar)
 
 dependencies {
     compileOnly(fileTree("${project.rootDir}/lib") { include("*.jar") })
-    implementation 'com.github.stefvanschie.inventoryframework:IF:0.10.16'
-    compileOnly 'me.pikamug.quests:quests-core:5.1.1'
+    implementation 'com.github.stefvanschie.inventoryframework:IF:0.10.17'
     compileOnly 'com.github.decentsoftware-eu:decentholograms:2.8.11'
     compileOnly 'net.skinsrestorer:skinsrestorer-api:15.4.0'
-    compileOnly 'com.mojang:authlib:1.5.21'
-    compileOnly "io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT"
+    compileOnly 'com.mojang:authlib:1.5.25'
+    compileOnly "io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT"
     compileOnly 'com.github.LoneDev6:itemsadder-api:3.6.3-beta-14'
     compileOnly 'me.lucko:helper-redis:1.2.0'
     compileOnly 'me.lucko:helper-mongo:1.2.0'

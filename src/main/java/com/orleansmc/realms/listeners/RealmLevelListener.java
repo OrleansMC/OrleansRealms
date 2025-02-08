@@ -33,11 +33,12 @@ public class RealmLevelListener implements Listener {
     public RealmLevelListener(OrleansRealms plugin) {
         this.plugin = plugin;
         Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-            var entries = newLevels.entrySet().stream().sorted(Map.Entry.comparingByValue());
+            var entries = newLevels.entrySet().stream()
+                    .sorted(Map.Entry.<String, Double>comparingByValue().reversed());
             for (Map.Entry<String, Double> entry : entries.toList()) {
                 RealmModel realm = plugin.realmsManager.getRealm(entry.getKey());
                 if (realm == null) continue;
-                final double oldLevel = realm.level;
+                final double oldLevel = Double.parseDouble(String.format("%.2f", realm.level));
                 realm.level = entry.getValue();
                 for (RealmMemberModel member : realm.members) {
                     Player player = Bukkit.getPlayer(member.name);
@@ -45,7 +46,10 @@ public class RealmLevelListener implements Listener {
                         List<RealmModel> realms = plugin.realmsManager.realms.values().stream()
                                 .filter(r -> r.members.stream().anyMatch(m -> m.name.equals(player.getName())))
                                 .toList();
-                        double maxLevel = realms.stream().min((r1, r2) -> Double.compare(r2.level, r1.level)).get().level;
+                        double maxLevel = realms.stream()
+                                .mapToDouble(r -> r.level)
+                                .max()
+                                .orElse(0.0);
                         if (maxLevel <= realm.level) {
                             if (Math.floor(oldLevel) != Math.floor(realm.level)) {
                                 IncreaseRealmLevelObjective.instance.onRealmLevelChange(

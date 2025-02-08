@@ -1,5 +1,7 @@
 package com.orleansmc.realms.menus;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
@@ -213,24 +215,19 @@ public class RealmMenu extends SuperMenu {
 
     public static ItemStack createPlayerHead(String playerName) throws DataRequestException {
         String base64Texture = getPlayerHeadTexture(playerName);
-        ItemStack skull = new ItemStack(Material.PLAYER_HEAD); // Kafa itemi oluştur
-        SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
+        final ItemStack head = new ItemStack(Material.PLAYER_HEAD);
 
         if (base64Texture != null && !base64Texture.isEmpty()) {
-            GameProfile profile = new GameProfile(UUID.randomUUID(), playerName);
-            profile.getProperties().put("textures", new Property("textures", base64Texture));
+            head.editMeta(SkullMeta.class, skullMeta -> {
+                final UUID uuid = UUID.randomUUID();
+                final PlayerProfile playerProfile = Bukkit.createProfile(uuid, uuid.toString().substring(0, 16));
+                playerProfile.setProperty(new ProfileProperty("textures", base64Texture));
 
-            try {
-                Field profileField = skullMeta.getClass().getDeclaredField("profile");
-                profileField.setAccessible(true);
-                profileField.set(skullMeta, profile);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-
-            skull.setItemMeta(skullMeta);
+                skullMeta.setPlayerProfile(playerProfile);
+            });
+            return head;
         }
 
-        return skull;
+        return head;
     }
 }
