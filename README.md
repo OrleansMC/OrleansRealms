@@ -9,8 +9,8 @@ shutdown of the original OrleansMC server.
 > coupled to the original infrastructure, or lack full documentation.
 
 > 📘 **Looking for a visual and detailed feature guide?**
-> Check out our comprehensive guides on the OrleansMC website:
 > 🗣️ _These guides are written in Turkish._
+> Check out our comprehensive guides on the OrleansMC website:
 > - [İşte Başlıyoruz](https://orleansmc.com/rehber/iste-basliyoruz)
 > - [Diyar Oluşturma](https://orleansmc.com/rehber/diyar-olusturma)
 > - [Orleans Mücevheri](https://orleansmc.com/rehber/orleans-mucevheri)
@@ -29,6 +29,27 @@ shutdown of the original OrleansMC server.
 - [Limitations](#limitations)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
+
+---
+
+## Plugin Dependencies
+
+The following plugins are required and must be listed under the `depend:` section in your `plugin.yml`:
+
+```yaml
+depend:
+  - OrleansMC
+  - HuskHomes
+  - helper
+  - helper-redis
+  - helper-mongo
+  - WorldBorderAPI
+  - Chunky
+  - Quests
+  - SkinsRestorer
+```
+
+These dependencies are essential for the plugin to function correctly. Make sure all are installed on your server.
 
 ---
 
@@ -67,6 +88,7 @@ The scope of the project includes:
 - **Java 21**
 - **Paper API 1.21.1**
 - **MongoDB (via Lucko's Helper library)**
+- **Redis (for cross-server communication)**
 - **Quests** (for quest objectives)
 - **PlaceholderAPI** (for dynamic placeholders)
 - **LuckPerms** (for permissions and chat prefixes)
@@ -81,10 +103,15 @@ The scope of the project includes:
     - Minecraft server running [Paper 1.21.1](https://papermc.io/downloads)
     - Java 21 or newer
     - MongoDB server (for player and realm data)
+    - Redis server (for cross-server communication)
     - [Lucko's Helper library](https://github.com/lucko/helper)
     - [Quests plugin](https://github.com/PikaMug/Quests)
     - [LuckPerms](https://luckperms.net/)
     - [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/)
+    - [Chunky](https://github.com/pop4959/Chunky)
+    - [SkinsRestorer](https://www.spigotmc.org/resources/skinsrestorer.2124/)
+    - [HuskHomes](https://github.com/WiIIiam278/HuskHomes)
+    - [WorldBorderAPI](https://github.com/yannicklamprecht/WorldBorderAPI)
     - [ItemsAdder](https://itemsadder.devs.beer/)
     - [OrleansGenerator](https://github.com/OrleansMC/OrleansGenerator) (see below)
 
@@ -242,12 +269,16 @@ See the [`LICENSE`](./LICENSE.txt) file for details.
 
 ## Acknowledgements
 
-- [OrleansMC Core](https://github.com/OrleansMC/OrleansMC)
+- [OrleansMC](https://github.com/OrleansMC/OrleansMC)
 - [OrleansGenerator](https://github.com/OrleansMC/OrleansGenerator)
 - [Quests](https://github.com/PikaMug/Quests)
 - [Lucko's Helper](https://github.com/lucko/helper)
 - [LuckPerms](https://luckperms.net/)
 - [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/)
+- [Chunky](https://github.com/pop4959/Chunky)
+- [SkinsRestorer](https://www.spigotmc.org/resources/skinsrestorer.2124/)
+- [HuskHomes](https://github.com/WiIIiam278/HuskHomes)
+- [WorldBorderAPI](https://github.com/yannicklamprecht/WorldBorderAPI)
 - [ItemsAdder](https://itemsadder.devs.beer/)
 - The original OrleansMC community
 
