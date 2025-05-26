@@ -1,7 +1,7 @@
 name: OrleansRealms
 version: '${version}'
 main: com.orleansmc.realms.OrleansRealms
-api-version: '1.20'
+api-version: '1.21'
 softdepend:
   - OrleansInteractions
   - OrleansShops
