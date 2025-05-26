@@ -131,16 +131,35 @@ The main configuration files are `config.yml` and `texts.yml`. Key settings incl
 Example `config.yml`:
 
 ```yaml
-database:
-  host: "localhost"
-  port: 27017
-  name: "orleans_realms"
-  user: "user"
-  password: "password"
-realms:
-  max-members: 10
-  default-radius: 100
-  allow-visitors: true
+# The name of the server (e.g., realms-1)
+server-name: '{SERVER_NAME}'
+
+# The name of the world (e.g., realms_world)
+world-name: '{WORLD_NAME}'
+
+realm-radius:
+  # Default radius for a new realm
+  default: 75
+  # Price to increase radius to 150 (in gems)
+  increase-150-price: 7500
+  # Price to increase radius to 250 (in credits)
+  increase-250-price: 11400
+  # Price to increase radius to 500 (in credits)
+  increase-500-price: 45000
+
+realm-member-count:
+  # Default allowed member count per realm
+  default: 3
+  # Price to increase member count (in credits)
+  increase-price: 500
+
+# Price to teleport back to death location (in gems)
+back-to-death-location-price: 75
+
+# Webhook URLs (replace with your own Discord webhook URLs)
+realm-webhook-url: "https://discord.com/api/webhooks/..."
+redstone-alert-webhook-url: "https://discord.com/api/webhooks/..."
+death-webhook-url: "https://discord.com/api/webhooks/..."
 ```
 
 ---
