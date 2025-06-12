@@ -34,22 +34,38 @@ shutdown of the original OrleansMC server.
 
 ## Plugin Dependencies
 
-The following plugins are required and must be listed under the `depend:` section in your `plugin.yml`:
+OrleansRealms relies on several other plugins to function correctly. Ensure these are installed on your server.
 
+**Hard Dependencies (Required):**
+These plugins **must** be installed for OrleansRealms to load and operate:
 ```yaml
 depend:
-  - OrleansMC
-  - HuskHomes
-  - helper
-  - helper-redis
-  - helper-mongo
-  - WorldBorderAPI
-  - Chunky
-  - Quests
-  - SkinsRestorer
+  - OrleansMC # Core plugin for OrleansMC network
+  - HuskHomes # For teleportation and home features
+  - helper # Lucko's utility library
+  - helper-redis # Lucko's Redis helper
+  - helper-mongo # Lucko's MongoDB helper
+  - WorldBorderAPI # For managing realm world borders
+  - Chunky # For pre-generating realm chunks
+  - Quests # For player quests and objectives
+  - SkinsRestorer # For player skins, especially for NPCs
+  - ItemsAdder # For custom items, GUIs, and fonts
+  - PlaceholderAPI # For dynamic placeholders
+  - LuckPerms # For permissions management
+  - RedisEconomyAPI # For Gem and Credit currencies
+  - Vault # Economy and permission abstraction
+  - DecentHolograms # For displaying leaderboard holograms
+  # InventoryFramework (IF by stefvanschie) is bundled via shadowJar
 ```
 
-These dependencies are essential for the plugin to function correctly. Make sure all are installed on your server.
+**Soft Dependencies (Optional but Recommended for full functionality):**
+These plugins are not strictly required for OrleansRealms to load, but certain features might be disabled or limited if they are not present:
+```yaml
+softdepend:
+  - OrleansInteractions # For custom interactions
+  - OrleansShops # For player shops
+  - Citizens # For NPC-based features like leaderboards
+```
 
 ---
 
@@ -87,35 +103,54 @@ The scope of the project includes:
 
 - **Java 21**
 - **Paper API 1.21.1**
-- **MongoDB (via Lucko's Helper library)**
-- **Redis (for cross-server communication)**
-- **Quests** (for quest objectives)
-- **PlaceholderAPI** (for dynamic placeholders)
-- **LuckPerms** (for permissions and chat prefixes)
-- **ItemsAdder** (for custom items and GUIs)
-- **OrleansGenerator** (fork of TerraformGenerator for biome assignment)
+- **MongoDB**: For storing player and realm data (via Lucko's Helper library).
+- **Redis**: For cross-server communication (via Lucko's Helper library) and currency data (via RedisEconomyAPI).
+- **Lucko's Helper Library**: Core utility for database connections, messaging, and more.
+- **[OrleansGenerator](https://github.com/OrleansMC/OrleansGenerator)**: Fork of TerraformGenerator for deterministic biome and climate assignment.
+- **Plugin Frameworks & APIs:**
+    - **[Chunky API](https://github.com/pop4959/Chunky)**: For pre-generating world chunks.
+    - **[Citizens API](https://github.com/CitizensDev/Citizens2)**: For NPC management (used in leaderboards).
+    - **[DecentHolograms API](https://www.spigotmc.org/resources/decentholograms.96927/)**: For creating and managing holograms.
+    - **[HuskHomes API](https://github.com/WiIIiam278/HuskHomes)**: For server-wide homes and teleportation.
+    - **[InventoryFramework (IF)](https://github.com/stefvanschie/IF)**: For creating complex GUIs (developed by stefvanschie, bundled in the plugin).
+    - **[ItemsAdder API](https://itemsadder.devs.beer/)**: For custom items, GUIs, and visual assets.
+    - **[LuckPerms API](https://luckperms.net/)**: For permission checking and context.
+    - **[PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/)**: For using and providing dynamic placeholders.
+    - **[Quests API](https://github.com/PikaMug/Quests)**: For integrating realm-specific objectives and player progression.
+    - **[RedisEconomyAPI](https://github.com/Emibergo02/RedisEconomy)**: For managing in-game currencies like Gems and Credits.
+    - **[SkinsRestorer API](https://www.spigotmc.org/resources/skinsrestorer.2124/)**: For fetching and applying player skins.
+    - **[Vault API](https://github.com/MilkBowl/VaultAPI)**: For economy integration.
+    - **[WorldBorderAPI](https://github.com/yannicklamprecht/WorldBorderAPI)**: For dynamically managing per-player world borders within realms.
 
 ---
 
 ## Installation
 
 1. **Requirements:**
-    - Minecraft server running [Paper 1.21.1](https://papermc.io/downloads)
-    - Java 21 or newer
-    - MongoDB server (for player and realm data)
-    - Redis server (for cross-server communication)
-    - [Lucko's Helper library](https://github.com/lucko/helper)
-    - [Quests plugin](https://github.com/PikaMug/Quests)
-    - [LuckPerms](https://luckperms.net/)
-    - [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/)
-    - [Chunky](https://github.com/pop4959/Chunky)
-    - [SkinsRestorer](https://www.spigotmc.org/resources/skinsrestorer.2124/)
-    - [HuskHomes](https://github.com/WiIIiam278/HuskHomes)
-    - [WorldBorderAPI](https://github.com/yannicklamprecht/WorldBorderAPI)
-    - [ItemsAdder](https://itemsadder.devs.beer/)
-    - [OrleansGenerator](https://github.com/OrleansMC/OrleansGenerator) (see below)
+    - Minecraft server running [Paper 1.21.1](https://papermc.io/downloads) or a compatible version.
+    - Java 21 or newer.
+    - MongoDB server.
+    - Redis server.
+    - All plugins listed under **Hard Dependencies** above.
+    - Optionally, plugins listed under **Soft Dependencies** for extended functionality.
+    - Specifically, ensure these are downloaded and installed in your server's `plugins` directory:
+        - [OrleansMC](https://github.com/OrleansMC/OrleansMC) (core plugin, also needs its JAR in `lib` as per step 2)
+        - [Lucko's Helper library](https://github.com/lucko/helper) (and its modules `helper-redis`, `helper-mongo`)
+        - [Quests plugin](https://github.com/PikaMug/Quests) (also needs its JAR in `lib` as per step 2)
+        - [LuckPerms](https://luckperms.net/)
+        - [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/)
+        - [Chunky](https://github.com/pop4959/Chunky)
+        - [SkinsRestorer](https://www.spigotmc.org/resources/skinsrestorer.2124/)
+        - [HuskHomes](https://github.com/WiIIiam278/HuskHomes)
+        - [WorldBorderAPI](https://github.com/yannicklamprecht/WorldBorderAPI)
+        - [ItemsAdder](https://itemsadder.devs.beer/)
+        - [OrleansGenerator](https://github.com/OrleansMC/OrleansGenerator)
+        - [RedisEconomyAPI](https://github.com/Emibergo02/RedisEconomy)
+        - [Vault](https://www.spigotmc.org/resources/vault.34315/)
+        - [DecentHolograms](https://www.spigotmc.org/resources/decentholograms.96927/)
+        - [Citizens](https://ci.citizensnpcs.co/job/Citizens2/) (if using features that depend on it)
 
-2. **Dependencies:**
+2. **Local Dependencies (lib folder):**
     - Build the latest `OrleansMC-0.1-all.jar` from [OrleansMC](https://github.com/OrleansMC/OrleansMC) core plugin and
       place it in the `lib` directory.
     - Download the Quests plugin JAR and place it in the `lib` directory.
@@ -230,6 +265,15 @@ are present in your ItemsAdder configuration:
 - `ui:realm_members_credit`
 - `ui:realm_members_char_dot`
 - `ui:realm_members_digit_0` ... `ui:realm_members_digit_9`
+- `ui:converter_menu`
+- `ui:converter_digit_0` ... `ui:converter_digit_9`
+- `ui:mainest_menu`
+- `ui:outland_menu`
+- `ui:realm_menu`
+- `ui:spectator_view`
+- `ui:spectator_view_disabled`
+- `ui:realm_settings`
+- `ui:climate_selection`
 
 ### Nameplate/Tags
 
@@ -280,6 +324,10 @@ See the [`LICENSE`](./LICENSE.txt) file for details.
 - [HuskHomes](https://github.com/WiIIiam278/HuskHomes)
 - [WorldBorderAPI](https://github.com/yannicklamprecht/WorldBorderAPI)
 - [ItemsAdder](https://itemsadder.devs.beer/)
+- [RedisEconomyAPI](https://github.com/Emibergo02/RedisEconomy)
+- [Vault](https://github.com/MilkBowl/VaultAPI)
+- [DecentHolograms](https://www.spigotmc.org/resources/decentholograms.96927/)
+- [Citizens](https://ci.citizensnpcs.co/job/Citizens2/)
 - The original OrleansMC community
 
 ---
@@ -287,3 +335,4 @@ See the [`LICENSE`](./LICENSE.txt) file for details.
 For questions, issues, or contributions, please use the GitHub Issues and Pull Requests features.
 
 ---
+
